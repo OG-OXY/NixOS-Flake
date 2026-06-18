@@ -1,4 +1,4 @@
-format = '[Ty](green)[@](red)[NixOS](blue)[:](red)$directory$git_branch$git_status$nix_shell$package$python$rust[\]](green)[†](red) $character$status'
+format = '[Ty](bold green)[@](bold red)[NixOS](bold blue)[:](bold red)$directory$git_branch$git_status$nix_shell$package$python$rust[\]](bold green)[†](bold red) $character$status'
 
 [character]
 success_symbol = "[❯](bold blue)"
@@ -6,7 +6,7 @@ error_symbol = "[❯](bold red)"
 disabled = false
 
 [directory]
-style = "yellow"
+style = "bold yellow"
 truncation_length = 3
 fish_style_pwd_dir_length = 1
 

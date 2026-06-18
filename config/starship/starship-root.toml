@@ -1,4 +1,4 @@
-format = '[root](yellow)[@](red)[NixOS](blue)[:](red)$directory$git_branch$git_status$nix_shell$package$python$rust[\]](yellow)[‡](red) $character$status'
+format = '[root](bold yellow)[@](bold red)[NixOS](bold blue)[:](bold red)$directory$git_branch$git_status$nix_shell$package$python$rust[\]](bold yellow)[‡](bold red) $character$status'
 
 [character]
 success_symbol = "[❯](bold blue)"
@@ -7,7 +7,7 @@ disabled = false
 
 # ... leave the rest of your root config exactly as it is
 [directory]
-style = "green"
+style = "bold green"
 truncation_length = 3
 fish_style_pwd_dir_length = 1
 
