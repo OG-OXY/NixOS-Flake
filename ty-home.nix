@@ -6,6 +6,6 @@
     imports = [ ./home.nix ];
 
     home.file = {
-    ".config/starship.toml".source = /etc/nixos/config/starship/starship.toml;
+    ".config/starship.toml".source = ./config/starship/starship.toml;
     };
 }

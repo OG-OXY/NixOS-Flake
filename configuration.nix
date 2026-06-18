@@ -1,23 +1,12 @@
 # Help is in configuration.nix(5) man page, https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, ... }:
-let # Home-Manager tarball version "26.11".
-   home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
-in
-{
-   imports =
-     [ # Include the results of the hardware scan.
-       ./hardware-configuration.nix
-       (import "${home-manager}/nixos")
-     ];
+{ config, lib, pkgs, self, ... }:
 
-  # Home-Manager imports.
-  home-manager.useUserPackages = true;
-  home-manager.useGlobalPkgs = true;
-  home-manager.backupFileExtension = "backup";
-  home-manager.users.ty = import ./ty-home.nix;
-  home-manager.users.root = import ./root-home.nix;
-  
+{
+  imports = [ 
+    ./hardware-configuration.nix
+  ];
+
   # Login shell.
   users.users.ty.shell = pkgs.fish;
   users.users.root.shell = pkgs.fish;
@@ -26,6 +15,7 @@ in
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelParams = [ "amd_iommu=on" "iommu=pt" ];
   boot.kernelModules = [ "kvm-amd" "vfio" "vfio_iommu_type1" "vfio_pci" ];
+  
   # Systemctl parameters.
   boot.kernel.sysctl = {    
     "kernel.sysrq" = true;
@@ -60,21 +50,18 @@ in
       }];
     }];
   };
+
   # User parameters.
   users.mutableUsers = true;
   users.users.ty = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "video" "render" "input" "audio" "docker" "libvirtd" "vboxusers" "wireshark" "tcpdump" ];
-    # User only PKGS.
-    packages = with pkgs; [
-
-    ];
+    packages = with pkgs; [];
   };
   
   # NIX-PKG-Manager parameters.
   nix = {
     settings = {
-      # Links duplicates to save space.
       auto-optimise-store = true;
       experimental-features = [ "nix-command" "flakes" ];
     };
@@ -88,18 +75,10 @@ in
   };
   
   # Networking PKGS + parameters.
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "nixos"; 
   networking.networkmanager.enable = true;
   networking.networkmanager.wifi.backend = "iwd";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # GDM displayManager.
-  # services.displayManager.gdm.enable = true;
-  
-  # Keymaps in X11.
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
-  
   # Install PKGS with system parameters.
   programs.firefox.enable = true;
   programs.tmux.enable = true;
@@ -120,18 +99,16 @@ in
     config = {
       user.name = "Ty";
       user.email = "ogoxy.yt@gmail.com";
-      # Use SSH key for signing.
       gpg.format = "ssh";
       user.signingkey = "~/.ssh/id_ed25519.pub";
       commit.gpgsign = true;
     };
   };
   
-  # System parameters.
-  environment.etc."atuin/config.toml".source = /etc/nixos/config/atuin/config.toml;
+  # System parameters (Converted to relative path for Flake compliance)
+  environment.etc."atuin/config.toml".source = ./config/atuin/config.toml;
 
   # Install system PKGS.
-  # https://search.nixos.org/ to find packages (and options).
   environment.systemPackages = with pkgs; [
     ghostty
     rofi
@@ -156,16 +133,12 @@ in
     fontconfig.enable = true;
   };
 
-  # Services.
-
   # X11 + WM.
   services.xserver = {
     enable = true;
     windowManager.qtile.enable = true;
     displayManager.sessionCommands = ''
-      xwallpaper --output DP-1 --zoom /home/ty/Pictures/Downloads/wpapers/gruv
-box-nix.png --output HDMI-1 --zoom /home/ty/Pictures/Downloads/wpapers/gruvbox
--nix.png
+      xwallpaper --output DP-1 --zoom /home/ty/Pictures/Downloads/wpapers/gruvbox-nix.png --output HDMI-1 --zoom /home/ty/Pictures/Downloads/wpapers/gruvbox-nix.png
       xset r rate 200 35 &
     '';
   };
@@ -195,7 +168,7 @@ box-nix.png --output HDMI-1 --zoom /home/ty/Pictures/Downloads/wpapers/gruvbox
     settings = {
       zram0 = {
         compression-algorithm = "lz4";
-	zram-size = 16384;
+        zram-size = 16384;
       };
     };
   };
@@ -204,14 +177,12 @@ box-nix.png --output HDMI-1 --zoom /home/ty/Pictures/Downloads/wpapers/gruvbox
   services.openssh = {
     enable = true;
     settings = {
-      PasswordAuthentication = false; # Disables insecure password logins.
-      PermitRootLogin = "no";         # Blocks root user access.
+      PasswordAuthentication = false;
+      PermitRootLogin = "no"; 
     };
   };
 
-  # Open firewall ports.
   networking.firewall.allowedTCPPorts = [ 22 ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
 
   services.udev.packages = with pkgs; [ vial ];
 
@@ -223,7 +194,6 @@ box-nix.png --output HDMI-1 --zoom /home/ty/Pictures/Downloads/wpapers/gruvbox
   
   # NixOS VM sandbox.
   virtualisation.vmVariant = {
-    # Passwd = "test"
     users.users.ty.password = "test";
     users.users.root.password = "test";
     virtualisation = {
@@ -250,8 +220,13 @@ box-nix.png --output HDMI-1 --zoom /home/ty/Pictures/Downloads/wpapers/gruvbox
     dockerCompat = true;
   };
 
-  # Copy NixOs (/run/current-system/configuration.nix).
-  system.copySystemConfiguration = true;
+  # Links backup snapshot into system generation (serves the purpose of system.copySystemConfiguration = true;).
+  system.extraSystemBuilderCmds = ''
+    ln -s ${self} $out/src
+  '';
+
+  # Injects git commit hash into the system version metadata
+  system.configurationRevision = lib.mkIf (self ? rev) self.rev;
 
   # Time zone.
   time.timeZone = "America/New_York";
@@ -260,9 +235,7 @@ box-nix.png --output HDMI-1 --zoom /home/ty/Pictures/Downloads/wpapers/gruvbox
   programs.nano.enable = false;
   services.libinput.enable = false;
   services.printing.enable = false;
-
-
-  # Origin NixOS version, for compatibility. NEVER change its value. 
-  # See "https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion".
+  
+  # Origin NixOS install version, NEVER CHANGE.
   system.stateVersion = "26.05";
 }

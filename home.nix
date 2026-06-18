@@ -5,12 +5,12 @@
     home.stateVersion = "26.11";
     
     home.file = {
-    ".config/ghostty".source = /etc/nixos/config/ghostty;
-    ".config/fish".source = /etc/nixos/config/fish;
-    ".config/tmux".source = /etc/nixos/config/tmux;
-    ".config/yazi".source = /etc/nixos/config/yazi;
-    ".config/btop".source = /etc/nixos/config/btop;
-    ".config/atuin/config.toml".source = /etc/nixos/config/atuin/config.toml;
+    ".config/ghostty".source = ./config/ghostty;
+    ".config/fish".source = ./config/fish;
+    ".config/tmux".source = ./config/tmux;
+    ".config/yazi".source = ./config/yazi;
+    ".config/btop".source = ./config/btop;
+    ".config/atuin/config.toml".source = ./config/atuin/config.toml;
     };
     
     home.packages = [
