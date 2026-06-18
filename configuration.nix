@@ -184,14 +184,18 @@
 
   networking.firewall.allowedTCPPorts = [ 22 ];
 
-  services.udev.packages = with pkgs; [ vial ];
+  # Udev rule 59-vial.rules (allow vial permissions for all devices).
+  services.udev.packages = [
+    (pkgs.writeTextFile {
+      name = "vial-udev-rules";
+      destination = "/etc/udev/rules.d/59-vial.rules";
+      text = ''
+        # Matches all potential Vial-compatible devices
+        KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+      '';
+    })
+  ];  
 
-  # Udev rules.
-  services.udev.extraRules = ''
-    # Keychron V3 8K
-    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0f30", MODE="0660", GROUP="users", TAG+="uaccess" TAG+="udev-acl"
-  '';
-  
   # NixOS VM sandbox.
   virtualisation.vmVariant = {
     users.users.ty.password = "test";
