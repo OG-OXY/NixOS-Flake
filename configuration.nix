@@ -3,7 +3,7 @@
 { config, lib, pkgs, self, ... }:
 
 {
-  imports = [ 
+  imports = [
     ./hardware-configuration.nix
   ];
 
@@ -17,13 +17,13 @@
   boot.kernelModules = [ "kvm-amd" "vfio" "vfio_iommu_type1" "vfio_pci" ];
   
   # Systemctl parameters.
-  boot.kernel.sysctl = {    
+  boot.kernel.sysctl = {
     "kernel.sysrq" = true;
     "vm.swappiness" = 100;
     "vm.dirty_background_ratio" = 5;
     "vm.dirty_ratio" = 10;
     "fs.inotify.max_user_watches" = 524288;
-  }; 
+  };
   
   # Bootloader + GRUB parameters.
   boot.loader = {
