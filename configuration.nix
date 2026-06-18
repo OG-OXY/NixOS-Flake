@@ -112,7 +112,7 @@
   environment.systemPackages = with pkgs; [
     ghostty
     rofi
-    vial
+    brave
     wget
     fastfetch
     btop
@@ -225,7 +225,7 @@
   };
 
   # Links backup snapshot into system generation (serves the purpose of system.copySystemConfiguration = true;).
-  system.extraSystemBuilderCmds = ''
+  system.systemBuilderCommands = ''
     ln -s ${self} $out/src
   '';
 
