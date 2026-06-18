@@ -1,6 +1,12 @@
 # Help is in configuration.nix(5) man page, https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, self, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  self,
+  ...
+}:
 
 {
   imports = [
@@ -13,9 +19,17 @@
 
   # Kernel PKG + parameters.
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelParams = [ "amd_iommu=on" "iommu=pt" ];
-  boot.kernelModules = [ "kvm-amd" "vfio" "vfio_iommu_type1" "vfio_pci" ];
-  
+  boot.kernelParams = [
+    "amd_iommu=on"
+    "iommu=pt"
+  ];
+  boot.kernelModules = [
+    "kvm-amd"
+    "vfio"
+    "vfio_iommu_type1"
+    "vfio_pci"
+  ];
+
   # Systemctl parameters.
   boot.kernel.sysctl = {
     "kernel.sysrq" = true;
@@ -24,7 +38,7 @@
     "vm.dirty_ratio" = 10;
     "fs.inotify.max_user_watches" = 524288;
   };
-  
+
   # Bootloader + GRUB parameters.
   boot.loader = {
     efi = {
@@ -38,32 +52,51 @@
       configurationLimit = 15;
     };
   };
-   
+
   # User account.
   security.sudo = {
     enable = true;
-    extraRules = [{
-      groups = [ "wheel" ];
-      commands = [{
-        command = "ALL";
-        options = [ "NOPASSWD" ];
-      }];
-    }];
+    extraRules = [
+      {
+        groups = [ "wheel" ];
+        commands = [
+          {
+            command = "ALL";
+            options = [ "NOPASSWD" ];
+          }
+        ];
+      }
+    ];
   };
 
   # User parameters.
   users.mutableUsers = true;
   users.users.ty = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "video" "render" "input" "audio" "docker" "libvirtd" "vboxusers" "wireshark" "tcpdump" ];
-    packages = with pkgs; [];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "video"
+      "render"
+      "input"
+      "audio"
+      "docker"
+      "libvirtd"
+      "vboxusers"
+      "wireshark"
+      "tcpdump"
+    ];
+    packages = with pkgs; [ ];
   };
-  
+
   # NIX-PKG-Manager parameters.
   nix = {
     settings = {
       auto-optimise-store = true;
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
     };
 
     # Garbage collection.
@@ -73,9 +106,9 @@
       options = "--delete-older-than 14d";
     };
   };
-  
+
   # Networking PKGS + parameters.
-  networking.hostName = "nixos"; 
+  networking.hostName = "nixos";
   networking.networkmanager.enable = true;
   networking.networkmanager.wifi.backend = "iwd";
 
@@ -88,7 +121,7 @@
   programs.zoxide.enable = true;
   programs.atuin.enable = true;
   programs.starship.enable = true;
-  
+
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -104,7 +137,7 @@
       commit.gpgsign = true;
     };
   };
-  
+
   # System parameters (Converted to relative path for Flake compliance)
   environment.etc."atuin/config.toml".source = ./config/atuin/config.toml;
 
@@ -125,7 +158,7 @@
     dysk
     tree
   ];
-  
+
   fonts = {
     packages = with pkgs; [
       nerd-fonts.jetbrains-mono
@@ -142,7 +175,7 @@
       xset r rate 200 35 &
     '';
   };
-  
+
   # Compositor.
   services.picom = {
     enable = true;
@@ -155,13 +188,13 @@
       corner-radius = 0;
     };
   };
-  
+
   # Sound.
   services.pipewire = {
     enable = true;
     pulse.enable = true;
   };
-  
+
   # Zram swap.
   services.zram-generator = {
     enable = true;
@@ -178,7 +211,7 @@
     enable = true;
     settings = {
       PasswordAuthentication = false;
-      PermitRootLogin = "no"; 
+      PermitRootLogin = "no";
     };
   };
 
@@ -194,7 +227,7 @@
         KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
       '';
     })
-  ];  
+  ];
 
   # NixOS VM sandbox.
   virtualisation.vmVariant = {
@@ -206,7 +239,7 @@
       qemu.options = [ "-device virtio-vga-gl -display gtk,gl=on" ];
     };
   };
-  
+
   # Virt-Manager VM libvirtd hook + hardware virtualisation.
   virtualisation.libvirtd = {
     enable = true;
@@ -217,7 +250,7 @@
       runAsRoot = true;
     };
   };
-  
+
   # Podman VM.
   virtualisation.podman = {
     enable = true;
@@ -234,12 +267,12 @@
 
   # Time zone.
   time.timeZone = "America/New_York";
-  
+
   # Disabled PKGS.
   programs.nano.enable = false;
   services.libinput.enable = false;
   services.printing.enable = false;
-  
+
   # Origin NixOS install version, NEVER CHANGE.
   system.stateVersion = "26.05";
 }
