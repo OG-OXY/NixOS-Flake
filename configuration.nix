@@ -87,8 +87,6 @@ in
     };
   };
   
-  nix.registry.nixpkgs.flake = inputs.nixpkgs;
-  
   # Networking PKGS + parameters.
   networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager.enable = true;
