@@ -1,5 +1,11 @@
-format = '[root](yellow)[@](red)[NixOS](blue)[:](red)$directory$git_branch$git_status$nix_shell$package$python$rust[\]](yellow)[‡](red) $status[ >](blue)'
+format = '[root](yellow)[@](red)[NixOS](blue)[:](red)$directory$git_branch$git_status$nix_shell$package$python$rust[\]](yellow)[‡](red) $character$status'
 
+[character]
+success_symbol = "[❯](bold blue)"
+error_symbol = "[❯](bold red)"
+disabled = false
+
+# ... leave the rest of your root config exactly as it is
 [directory]
 style = "green"
 truncation_length = 3
