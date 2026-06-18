@@ -1,0 +1,25 @@
+# Single quotes protect the backslashes from the TOML parser!
+format = '[Ty](green)[@](red)[NixOS](blue)[:](red)$directory$git_branch$git_status$nix_shell$package$python$rust[\]](green)[†](red) $status[ >](blue)'
+
+[username]
+show_always = true
+disabled = false
+
+[hostname]
+ssh_only = false
+disabled = false
+
+[directory]
+style = "yellow"
+truncation_length = 3
+fish_style_pwd_dir_length = 1
+
+[status]
+disabled = false
+# This keeps the brackets hidden UNLESS a command actually fails
+format = '[\[$int\]](bold red) '
+
+[nix_shell]
+disabled = false
+format = "via [❄️ $state $name]($style) "
+style = "bold blue"

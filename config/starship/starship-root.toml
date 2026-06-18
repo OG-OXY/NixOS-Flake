@@ -1,0 +1,23 @@
+format = '[root](yellow)[@](red)[NixOS](blue)[:](red)$directory$git_branch$git_status$nix_shell$package$python$rust[\]](yellow)[‡](red) $status[ >](blue)'
+
+[username]
+show_always = true
+disabled = false
+
+[hostname]
+ssh_only = false
+disabled = false
+
+[directory]
+style = "green"
+truncation_length = 3
+fish_style_pwd_dir_length = 1
+
+[status]
+disabled = false
+format = '[\[$int\]](bold red) '
+
+[nix_shell]
+disabled = false
+format = "via [❄️ $state $name]($style) "
+style = "bold blue"
