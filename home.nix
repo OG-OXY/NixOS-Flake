@@ -13,6 +13,12 @@
     ".config/atuin/config.toml".source = /etc/nixos/config/atuin/config.toml;
     };
     
+    home.packages = [
+      # This dynamically reads your script file and turns it into a system binary
+      (pkgs.writeShellScriptBin "sys-upgrade" (builtins.readFile ./config/scripts/nixos-backup.sh))
+    ];
+    
+
     programs.fish = {
       plugins = with pkgs.fishPlugins; [
         { name = "bass"; src = bass.src; }
