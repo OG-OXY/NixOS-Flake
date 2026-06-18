@@ -26,6 +26,10 @@ git add -A
 echo "⚙️ Rebuilding and switching NixOS system..."
 sudo nixos-rebuild switch --flake .#nixos
 
+# FIX: Reclaim user ownership of any files sudo or the builder modified
+echo "🔑 Restoring file ownership permissions..."
+sudo chown -R ty:users .
+
 # 2. Automated Git Commit and Push tracking
 echo "📝 Checking for configuration changes to commit..."
 if ! git diff-index --quiet HEAD --; then
