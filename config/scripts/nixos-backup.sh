@@ -1,17 +1,39 @@
 #!/usr/bin/env bash
 set -e
 
-# 1. Define your out-of-repo safety backup directory
-BACKUP_DIR="$HOME/.config/nixos-backups/$(date +%Y-%m-%d_%H-%M)"
+# Jump directly into your active configuration directory
+cd "$HOME/nixos"
 
+echo "🔄 Fetching latest channel inputs and updating flake.lock..."
+# Re-pins upstream packages to their absolute newest commit hashes
+nix flake update
+
+# 1. Define your out-of-repo safety backup directory
+BACKUP_DIR="$HOME/.nix-backup/$(date +%Y-%m-%d_%H-%M)"
 echo "📦 Copying files to independent safety backup: $BACKUP_DIR..."
 mkdir -p "$BACKUP_DIR"
-# Copy only your core configuration assets, skipping the Projects cache folder
-cp -r $HOME/nixos/*.nix $HOME/nixos/config "$BACKUP_DIR/"
+
+# Copy your core configuration assets plus the newly generated lockfile
+cp -r *.nix config flake.lock "$BACKUP_DIR/"
 
 echo "🧹 Formatting Nix files with nixfmt..."
-# Runs nixfmt instantly on your config files without installing it permanently
-nix run nixpkgs#nixfmt -- $HOME/nixos/*.nix
+nix run nixpkgs#nixfmt -- *.nix
 
-echo "⚙️ Rebuilding NixOS system via your home directory layout..."
-sudo nixos-rebuild switch --flake /etc/nixos
+echo "⚡ Staging formatted elements and the new lockfile to Git..."
+# Mandatory: Ensures the Flake engine registers the lockfile modifications
+git add -A
+
+echo "⚙️ Rebuilding and switching NixOS system..."
+sudo nixos-rebuild switch --flake .#nixos
+
+# 2. Automated Git Commit and Push tracking
+echo "📝 Checking for configuration changes to commit..."
+if ! git diff-index --quiet HEAD --; then
+    echo "💾 Changes detected. Committing lockfile and script mutations..."
+    git commit -m "System auto-upgrade & lock refresh: $(date +'%Y-%m-%d %H:%M')"
+    
+    echo "🚀 Pushing configuration updates upstream..."
+    git push
+else
+    echo "✅ No new updates or package upgrades detected. Tree is clean."
+fi
