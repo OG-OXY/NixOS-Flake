@@ -28,7 +28,7 @@ in
   boot.kernelModules = [ "kvm-amd" "vfio" "vfio_iommu_type1" "vfio_pci" ];
   # Systemctl parameters.
   boot.kernel.sysctl = {    
-    "kernerl.sysrq" = true;
+    "kernel.sysrq" = true;
     "vm.swappiness" = 100;
     "vm.dirty_background_ratio" = 5;
     "vm.dirty_ratio" = 10;
