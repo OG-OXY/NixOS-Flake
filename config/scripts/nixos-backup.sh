@@ -1,14 +1,23 @@
 #!/usr/bin/env bash
 set -e
 
+# SAFETY GUARD: Detect root execution, safely drop to 'ty', and re-run
+if [ "$EUID" -eq 0 ]; then
+    echo "⚠️ Warning: Script executed as root or via sudo."
+    echo "🔒 Dropping privileges and re-running as user 'ty'..."
+    
+    # Force execution as 'ty' with a pristine environment (-i)
+    # The '|| exit 1' guarantees the script dies instantly if de-escalation fails
+    exec sudo -i -u ty direnv exec . "$0" "$@" || exit 1
+fi
+
 # Jump directly into your active configuration directory
 cd "$HOME/nixos"
 
 echo "🔄 Fetching latest channel inputs and updating flake.lock..."
-# Re-pins upstream packages to their absolute newest commit hashes
 nix flake update
 
-# 1. Define your out-of-repo safety backup directory
+# 1. Safety backup directory
 BACKUP_DIR="$HOME/.nix-backup/$(date +%Y-%m-%d_%H-%M)"
 echo "📦 Copying files to independent safety backup: $BACKUP_DIR..."
 mkdir -p "$BACKUP_DIR"
@@ -20,17 +29,16 @@ echo "🧹 Formatting Nix files with nixfmt..."
 nix run nixpkgs#nixfmt -- *.nix
 
 echo "⚡ Staging formatted elements and the new lockfile to Git..."
-# Mandatory: Ensures the Flake engine registers the lockfile modifications
 git add -A
 
 echo "⚙️ Rebuilding and switching NixOS system..."
 sudo nixos-rebuild switch --flake .#nixos
 
-# FIX: Reclaim user ownership of any files sudo or the builder modified
+# Reclaim user ownership of files sudo or the builder modified
 echo "🔑 Restoring file ownership permissions..."
 sudo chown -R ty:users .
 
-# 2. Automated Git Commit and Push tracking
+# 2. Git Commit and Push tracking
 echo "📝 Checking for configuration changes to commit..."
 if ! git diff-index --quiet HEAD --; then
     echo "💾 Changes detected. Committing lockfile and script mutations..."
