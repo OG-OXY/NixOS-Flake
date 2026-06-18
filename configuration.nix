@@ -86,6 +86,9 @@ in
       options = "--delete-older-than 14d";
     };
   };
+  
+  nix.registry.nixpkgs.flake = inputs.nixpkgs;
+  
   # Networking PKGS + parameters.
   networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager.enable = true;
@@ -216,8 +219,8 @@ box-nix.png --output HDMI-1 --zoom /home/ty/Pictures/Downloads/wpapers/gruvbox
 
   # Udev rules.
   services.udev.extraRules = ''
-    # Grant access to all hidraw devices
-    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0660", GROUP="plugdev", TAG+="uaccess" TAG+="udev-acl"
+    # Keychron V3 8K
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="0f30", MODE="0660", GROUP="users", TAG+="uaccess" TAG+="udev-acl"
   '';
   
   # NixOS VM sandbox.
