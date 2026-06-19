@@ -113,7 +113,6 @@
   networking.networkmanager.wifi.backend = "iwd";
 
   # Install PKGS with system parameters.
-  programs.firefox.enable = true;
   programs.tmux.enable = true;
   programs.fish.enable = true;
   programs.yazi.enable = true;
@@ -136,6 +135,11 @@
       user.signingkey = "~/.ssh/id_ed25519.pub";
       commit.gpgsign = true;
     };
+  };
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
   };
 
   # System parameters (Converted to relative path for Flake compliance)
