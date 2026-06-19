@@ -224,24 +224,24 @@
       name = "keychron-udev-rules";
       destination = "/etc/udev/rules.d/50-keychron.rules";
       text = ''
-	# 1. Keychron Keyboards & Receivers (ZMK/QMK WebHID Profile)
-        # Any Keychron device using raw hidraw or USB nodes
-        KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
-        SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+        	# 1. Keychron Keyboards & Receivers (ZMK/QMK WebHID Profile)
+                # Any Keychron device using raw hidraw or USB nodes
+                KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+                SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
 
-        # 2. Mice (Wired Connection or USB Dongles)
-        # This captures universal mouse/pointer devices on the hidraw layer
-        KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="*input*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+                # 2. Mice (Wired Connection or USB Dongles)
+                # This captures universal mouse/pointer devices on the hidraw layer
+                KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="*input*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
 
-        # 3. Flashing & Bootloader Modes (flashing QMK/Vial/ZMK binaries)
-        # STM32 DFU Bootloader
-        SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE="0660", GROUP="users", TAG+="uaccess"
-        
-	# APM32 DFU Bootloader
-        SUBSYSTEMS=="usb", ATTRS{idVendor}=="314b", ATTRS{idProduct}=="0106", MODE="0660", GROUP="users", TAG+="uaccess"
-        
-	# Raspberry Pi RP2040 Bootloader (uf2 mass storage / picoboot)
-        SUBSYSTEMS=="usb", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="0003", MODE="0660", GROUP="users", TAG+="uaccess"
+                # 3. Flashing & Bootloader Modes (flashing QMK/Vial/ZMK binaries)
+                # STM32 DFU Bootloader
+                SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE="0660", GROUP="users", TAG+="uaccess"
+                
+        	# APM32 DFU Bootloader
+                SUBSYSTEMS=="usb", ATTRS{idVendor}=="314b", ATTRS{idProduct}=="0106", MODE="0660", GROUP="users", TAG+="uaccess"
+                
+        	# Raspberry Pi RP2040 Bootloader (uf2 mass storage / picoboot)
+                SUBSYSTEMS=="usb", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="0003", MODE="0660", GROUP="users", TAG+="uaccess"
       '';
     })
   ];
