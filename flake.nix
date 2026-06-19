@@ -15,6 +15,7 @@
       self,
       nixpkgs,
       home-manager,
+      zen-browser,
       ...
     }@inputs:
     {
@@ -22,7 +23,7 @@
         # Hostname declared in configuration.nix
         "nixos" = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit self; };
+          specialArgs = { inherit inputs; };
           modules = [
             ./hardware-configuration.nix
             ./configuration.nix

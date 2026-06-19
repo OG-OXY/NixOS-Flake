@@ -2,6 +2,7 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 
@@ -21,6 +22,7 @@
   home.packages = [
     # This dynamically reads your script file and turns it into a system binary
     (pkgs.writeShellScriptBin "sys-upgrade" (builtins.readFile ./config/scripts/nixos-backup.sh))
+    inputs.zen-browser.packages.${pkgs.system}.default
   ];
 
   programs.fish = {
