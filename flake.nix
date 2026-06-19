@@ -23,7 +23,7 @@
         # Hostname declared in configuration.nix
         "nixos" = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs self; };
           modules = [
             ./hardware-configuration.nix
             ./configuration.nix
@@ -40,7 +40,7 @@
               home-manager.users.ty = import ./ty-home.nix;
 
               # Allows home.nix profiles to access inputs if needed
-              home-manager.extraSpecialArgs = { inherit inputs; };
+              home-manager.extraSpecialArgs = { inherit inputs self; };
             }
           ];
         };
