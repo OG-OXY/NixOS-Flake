@@ -4,6 +4,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   self,
   ...
 }:
@@ -146,23 +147,27 @@
   environment.etc."atuin/config.toml".source = ./config/atuin/config.toml;
 
   # Install system PKGS.
-  environment.systemPackages = with pkgs; [
-    ghostty
-    rofi
-    brave
-    vial
-    wget
-    fastfetch
-    btop
-    pfetch
-    xwallpaper
-    scrot
-    maim
-    slop
-    xclip
-    dysk
-    tree
-  ];
+  environment.systemPackages =
+    (with pkgs; [
+      ghostty
+      rofi
+      brave
+      vial
+      wget
+      fastfetch
+      btop
+      pfetch
+      xwallpaper
+      scrot
+      maim
+      slop
+      xclip
+      dysk
+      tree
+    ])
+    ++ [
+      inputs.zen-browser.packages.${pkgs.system}.default
+    ];
 
   fonts = {
     packages = with pkgs; [

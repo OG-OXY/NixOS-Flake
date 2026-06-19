@@ -11,39 +11,29 @@
   };
 
   outputs =
-    {
+    inputs@{
       self,
       nixpkgs,
       home-manager,
-      zen-browser,
       ...
-    }@inputs:
+    }:
     {
-      nixosConfigurations = {
-        # Hostname declared in configuration.nix
-        "nixos" = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs self; };
-          modules = [
-            ./hardware-configuration.nix
-            ./configuration.nix
-
-            # Inject Home Manager natively as a system module
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "backup";
-
-              # Point to user-specific home configurations
-              home-manager.users.root = import ./root-home.nix;
-              home-manager.users.ty = import ./ty-home.nix;
-
-              # Allows home.nix profiles to access inputs if needed
-              home-manager.extraSpecialArgs = { inherit inputs self; };
-            }
-          ];
-        };
+      nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        specialArgs = { inherit inputs self; };
+        modules = [
+          ./hardware-configuration.nix
+          ./configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.users.root = import ./root-home.nix;
+            home-manager.users.ty = import ./ty-home.nix;
+            home-manager.extraSpecialArgs = { inherit inputs self; };
+          }
+        ];
       };
     };
 }
