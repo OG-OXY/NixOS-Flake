@@ -146,6 +146,7 @@
     ghostty
     rofi
     brave
+    vial
     wget
     fastfetch
     btop
