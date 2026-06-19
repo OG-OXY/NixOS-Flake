@@ -27,16 +27,44 @@
 
   programs.fish = {
     plugins = with pkgs.fishPlugins; [
-      { name = "bass"; src = bass.src; }
-      { name = "bax"; src = pkgs.fetchFromGitHub {owner = "vanyaxar"; repo = "bax"; rev = "master"; 
-      sha256 = "sha256-R3hVjY2F+8w8w0Y7Z5UvN8RzQW2Z5X1Y2Z3W4V5U6T7="; }; }
-      { name = "fzf-fish"; src = fzf-fish.src; }
-      { name = "autopair"; src = autopair.src; }
-      { name = "sponge"; src = sponge.src; }
-      { name = "done"; src = done.src; }
-      { name = "abbreviation-tips"; src = pkgs.fetchFromGitHub { owner = "gazorby"; 
-      repo = "fish-abbreviation-tips"; rev = "v0.7.0"; 
-      sha256 = "sha256-6gD710S9w76vMkwS9P8Ue2kY4QxP8ZkwMkwS9P8Ue2k="; }; }
+      {
+        name = "bass";
+        src = bass.src;
+      }
+      {
+        name = "bax";
+        src = pkgs.fetchFromGitHub {
+          owner = "vanyaxar";
+          repo = "bax";
+          rev = "master";
+          sha256 = "sha256-R3hVjY2F+8w8w0Y7Z5UvN8RzQW2Z5X1Y2Z3W4V5U6T7=";
+        };
+      }
+      {
+        name = "fzf-fish";
+        src = fzf-fish.src;
+      }
+      {
+        name = "autopair";
+        src = autopair.src;
+      }
+      {
+        name = "sponge";
+        src = sponge.src;
+      }
+      {
+        name = "done";
+        src = done.src;
+      }
+      {
+        name = "abbreviation-tips";
+        src = pkgs.fetchFromGitHub {
+          owner = "gazorby";
+          repo = "fish-abbreviation-tips";
+          rev = "v0.7.0";
+          sha256 = "sha256-6gD710S9w76vMkwS9P8Ue2kY4QxP8ZkwMkwS9P8Ue2k=";
+        };
+      }
     ];
   };
 
