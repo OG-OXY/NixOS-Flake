@@ -25,14 +25,14 @@
             nixpkgs.hostPlatform = "x86_64-linux";
             nixpkgs.config.allowUnfree = true;
           }
-          ./configuration.nix
+          ./config.nix
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "backup";
-            home-manager.users.root = import ./root-home.nix;
-            home-manager.users.ty = import ./ty-home.nix;
+            home-manager.users.root = import ./homes/root-home.nix;
+            home-manager.users.ty = import ./homes/ty-home.nix;
             home-manager.extraSpecialArgs = { inherit inputs self; };
           }
         ];

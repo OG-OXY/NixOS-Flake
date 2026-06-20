@@ -11,9 +11,9 @@
 
 {
   imports = [
-    ./hardware.nix
-    ./amd.nix
-    ./nvidia.nix
+    ./hardware/hardware.nix
+    ./hardware/amd.nix
+    ./hardware/nvidia.nix
   ];
 
   # Login shell.
