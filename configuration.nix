@@ -11,7 +11,9 @@
 
 {
   imports = [
-    ./hardware-configuration.nix
+    ./hardware.nix
+    ./amd.nix
+    ./nvidia.nix
   ];
 
   # Login shell.
@@ -143,6 +145,13 @@
     nix-direnv.enable = true;
   };
 
+  fonts = {
+    packages = with pkgs; [
+      nerd-fonts.jetbrains-mono
+    ];
+    fontconfig.enable = true;
+  };
+
   # System parameters (Converted to relative path for Flake compliance)
   environment.etc."atuin/config.toml".source = ./config/atuin/config.toml;
 
@@ -152,16 +161,17 @@
       ghostty
       rofi
       brave
-      vial
       wget
-      fastfetch
-      btop
       pfetch
-      xwallpaper
       scrot
       maim
       slop
       xclip
+      qalculate-gtk
+      pavucontrol
+      xwallpaper
+      fastfetch
+      btop
       dysk
       tree
     ])
@@ -169,11 +179,15 @@
       inputs.zen-browser.packages.${pkgs.system}.default
     ];
 
-  fonts = {
-    packages = with pkgs; [
-      nerd-fonts.jetbrains-mono
-    ];
-    fontconfig.enable = true;
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    # Optional: Enable experimental features for better codec support
+    settings = {
+      General = {
+        Experimental = true;
+      };
+    };
   };
 
   # X11 + WM.
@@ -181,8 +195,8 @@
     enable = true;
     windowManager.qtile.enable = true;
     displayManager.sessionCommands = ''
-      xwallpaper --output DP-1 --zoom /home/ty/Pictures/Downloads/wpapers/gruvbox-nix.png --output HDMI-1 --zoom /home/ty/Pictures/Downloads/wpapers/gruvbox-nix.png
-      xset r rate 200 35 &
+      xwallpaper --output DP-1 --zoom /home/ty/Media/Pictures/wpapers/gruvbox-rainbow-nix.png --output HDMI-1 --zoom /home/ty/Media/Pictures/wpapers/gruvbox-rainbow-nix.png
+      xset r rate 200 45 &
     '';
   };
 
@@ -203,6 +217,7 @@
   services.pipewire = {
     enable = true;
     pulse.enable = true;
+    alsa.enable = true;
   };
 
   # Zram swap.

@@ -19,10 +19,12 @@
     }:
     {
       nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
         specialArgs = { inherit inputs self; };
         modules = [
-          ./hardware-configuration.nix
+          {
+            nixpkgs.hostPlatform = "x86_64-linux";
+            nixpkgs.config.allowUnfree = true;
+          }
           ./configuration.nix
           home-manager.nixosModules.home-manager
           {

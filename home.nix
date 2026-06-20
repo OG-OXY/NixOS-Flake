@@ -25,6 +25,9 @@
     inputs.zen-browser.packages.${pkgs.system}.default
   ];
 
+  programs.imv.enable = true;
+  programs.mpv.enable = true;
+
   programs.fish = {
     plugins = with pkgs.fishPlugins; [
       {
