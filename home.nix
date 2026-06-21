@@ -22,7 +22,7 @@
     # This dynamically reads your script file and turns it into a system binary
     (pkgs.writeShellScriptBin "sys-upgrade" (builtins.readFile ./config/scripts/nixos-backup.sh))
   ];
-  
+
   programs.fish = {
     plugins = with pkgs.fishPlugins; [
       {

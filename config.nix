@@ -228,27 +228,27 @@
 
   services.greetd.enable = true;
 
-   # X11 + WM.
-   # services.xserver = {
-    # enable = true;
-    # windowManager.qtile.enable = true;
-    # displayManager.sessionCommands = ''
-      # xwallpaper --output DP-1 --zoom /home/ty/Media/Pictures/wpapers/gruvbox-rainbow-nix.png --output HDMI-1 --zoom /home/ty/Media/Pictures/wpapers/gruvbox-rainbow-nix.png
-      # xset r rate 200 45 &
-    # '';
+  # X11 + WM.
+  # services.xserver = {
+  # enable = true;
+  # windowManager.qtile.enable = true;
+  # displayManager.sessionCommands = ''
+  # xwallpaper --output DP-1 --zoom /home/ty/Media/Pictures/wpapers/gruvbox-rainbow-nix.png --output HDMI-1 --zoom /home/ty/Media/Pictures/wpapers/gruvbox-rainbow-nix.png
+  # xset r rate 200 45 &
+  # '';
   # };
 
   # Compositor.
   # services.picom = {
-    # enable = true;
-    # settings = {
-      # fading = true;
-      # shadows = true;
-      # blur = true;
-      # active-opacity = 1.0;
-      # inactive-opacity = 0.95;
-      # corner-radius = 0;
-    # };
+  # enable = true;
+  # settings = {
+  # fading = true;
+  # shadows = true;
+  # blur = true;
+  # active-opacity = 1.0;
+  # inactive-opacity = 0.95;
+  # corner-radius = 0;
+  # };
   # };
 
   # Sound.
@@ -279,7 +279,7 @@
   };
 
   networking.firewall.allowedTCPPorts = [ 22 ];
-  
+
   security.polkit.enable = true;
 
   # Udev rule 50-keychron/vial.rules (allow keychron launcher and vial permissions for all devices).
