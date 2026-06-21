@@ -282,38 +282,30 @@
 
   security.polkit.enable = true;
 
-  # Udev rule 50-keychron/vial.rules (allow keychron launcher and vial permissions for all devices).
+  # 1. Enable the massive, community-maintained universal QMK/DFU/Bootloader ruleset
+  hardware.keyboard.qmk.enable = true;
+
+  # 2. Keep your custom high-priority launcher and HID rules
   services.udev.packages = [
     (pkgs.writeTextFile {
       name = "keychron-udev-rules";
       destination = "/etc/udev/rules.d/50-keychron.rules";
       text = ''
-                # 1. KEYCHRON KEYBOARDS & RECEIVERS (Factory ZMK, VIA, or QMK Modes)
-                
-        	# Target Keychron's Vendor ID globally for raw hidraw and USB permissions
-                KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
-                SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
-                # 2. VIAL COMPATIBILITY LAYER
-                KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+        # KEYCHRON KEYBOARDS & RECEIVERS (Factory ZMK, VIA, or QMK Modes)
+        KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+        SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
 
-              
-                # 3. UNIVERSAL MOUSE / POINTER INPUTS
-                KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="*input*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+        # VIAL COMPATIBILITY LAYER
+        KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
 
-                # 4. FLASHING & BOOTLOADER MODES (For switching between ZMK & QMK/Vial)
-              
-                # STM32 DFU Bootloader
-                SUBSYSTEMS=="usb", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="df11", MODE="0660", GROUP="users", TAG+="uaccess"
-              
-                # APM32 DFU Bootloader (Common on newer Keychron hardware)
-                SUBSYSTEMS=="usb", ATTRS{idVendor}=="314b", ATTRS{idProduct}=="0106", MODE="0660", GROUP="users", TAG+="uaccess"
-              
-                # Raspberry Pi RP2040 Bootloader (Mass storage / picoboot mode)
-                SUBSYSTEMS=="usb", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="0003", MODE="0660", GROUP="users", TAG+="uaccess"
+        # UNIVERSAL MOUSE / POINTER INPUTS
+        KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="*input*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+
+        # Catch-all for the specific GigaDevice/Keychron DFU chip variant
+        SUBSYSTEMS=="usb", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="df11", MODE="0660", GROUP="users", TAG+="uaccess"
       '';
     })
   ];
-
   # NixOS VM sandbox.
   virtualisation.vmVariant = {
     users.users.ty.password = "test";
