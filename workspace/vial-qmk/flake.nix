@@ -1,5 +1,5 @@
 {
-  description = "QMK/Vial development environment";
+  description = "Vial-QMK development environment";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -12,13 +12,23 @@
     in
     {
       devShells.${system}.default = pkgs.mkShell {
-        buildInputs = with pkgs; [
+        name = "vial-qmk-env";
+        
+        nativeBuildInputs = with pkgs; [
+          git
+          gnumake
           qmk
           dfu-programmer
           dfu-util
-          gcc-arm-embedded
           avrdude
+          gcc-arm-embedded
         ];
+
+        shellHook = ''
+          echo "⚡ Vial-QMK Development Environment Loaded ⚡"
+          # Ensures QMK knows where to look if it needs internal dependencies
+          export QMK_HOME="$PWD/vial-qmk" 
+        '';
       };
     };
 }
