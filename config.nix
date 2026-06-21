@@ -19,6 +19,7 @@
   # Login shell.
   users.users.ty.shell = pkgs.fish;
   users.users.root.shell = pkgs.fish;
+  enviroment.shells = with pkgs; [ fish ];
 
   # Kernel PKG + parameters.
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -52,7 +53,7 @@
       device = "nodev";
       efiSupport = true;
       useOSProber = true;
-      configurationLimit = 15;
+      configurationLimit = 30;
     };
   };
 
@@ -115,7 +116,15 @@
   networking.networkmanager.enable = true;
   networking.networkmanager.wifi.backend = "iwd";
 
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+    WLR_NO_HARDWARE_CURSORS = "1";
+  };
+
   # Install PKGS with system parameters.
+  programs.hyprland.enable = true;
+  programs.hyprlandwithUWSM.enable = true;
+  programs.regreet.enable = true;
   programs.tmux.enable = true;
   programs.fish.enable = true;
   programs.yazi.enable = true;
@@ -123,6 +132,7 @@
   programs.zoxide.enable = true;
   programs.atuin.enable = true;
   programs.starship.enable = true;
+  programs.hyprpolkitagent.enable = true;
 
   programs.neovim = {
     enable = true;
@@ -158,26 +168,44 @@
   # Install system PKGS.
   environment.systemPackages =
     (with pkgs; [
+      hyprshot
+      hyprpaper
+      hyprpicker
+      hyprpm
+      waybar
+      wofi
+      mako
+      wl-clipboard
+      cliphist
+      rbw
+      rofi-rbw-wayland
+      wtype
+      pinentry-curses
+      pavucontrol
       ghostty
-      rofi
       brave
+      qalculate-gtk
+      mpv
+      imv
+      wl-clipboard
+      clip-hist
       wget
       pfetch
-      scrot
-      maim
-      slop
-      xclip
-      qalculate-gtk
-      pavucontrol
-      xwallpaper
-      fastfetch
       btop
+      fastfetch
       dysk
       tree
     ])
     ++ [
       inputs.zen-browser.packages.${pkgs.system}.default
     ];
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagment.enable = false;
+    open = false;
+
+  };
 
   hardware.bluetooth = {
     enable = true;
@@ -190,28 +218,44 @@
     };
   };
 
-  # X11 + WM.
-  services.xserver = {
+  xdg.portal = {
     enable = true;
-    windowManager.qtile.enable = true;
-    displayManager.sessionCommands = ''
-      xwallpaper --output DP-1 --zoom /home/ty/Media/Pictures/wpapers/gruvbox-rainbow-nix.png --output HDMI-1 --zoom /home/ty/Media/Pictures/wpapers/gruvbox-rainbow-nix.png
-      xset r rate 200 45 &
-    '';
+    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+    config.common.default = "*";
   };
 
-  # Compositor.
-  services.picom = {
+  services.greetd = {
     enable = true;
     settings = {
-      fading = true;
-      shadows = true;
-      blur = true;
-      active-opacity = 1.0;
-      inactive-opacity = 0.95;
-      corner-radius = 0;
+      default_session = {
+        command = "${pkgs.greetd.regreet}"/bin/regreet;
+	user = "greeter";
+      };
     };
   };
+
+   # X11 + WM.
+   # services.xserver = {
+    # enable = true;
+    # windowManager.qtile.enable = true;
+    # displayManager.sessionCommands = ''
+      # xwallpaper --output DP-1 --zoom /home/ty/Media/Pictures/wpapers/gruvbox-rainbow-nix.png --output HDMI-1 --zoom /home/ty/Media/Pictures/wpapers/gruvbox-rainbow-nix.png
+      # xset r rate 200 45 &
+    # '';
+  # };
+
+  # Compositor.
+  # services.picom = {
+    # enable = true;
+    # settings = {
+      # fading = true;
+      # shadows = true;
+      # blur = true;
+      # active-opacity = 1.0;
+      # inactive-opacity = 0.95;
+      # corner-radius = 0;
+    # };
+  # };
 
   # Sound.
   services.pipewire = {
@@ -241,8 +285,10 @@
   };
 
   networking.firewall.allowedTCPPorts = [ 22 ];
+  
+  security.polkit.enable = true;
 
-  # Udev rule 59-vial.rules (allow vial permissions for all devices).
+  # Udev rule 50-keychron/vial.rules (allow keychron launcher and vial permissions for all devices).
   services.udev.packages = [
     (pkgs.writeTextFile {
       name = "keychron-udev-rules";

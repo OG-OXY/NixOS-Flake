@@ -7,7 +7,6 @@
 }:
 
 {
-
   home.stateVersion = "26.11";
 
   home.file = {
@@ -22,12 +21,8 @@
   home.packages = [
     # This dynamically reads your script file and turns it into a system binary
     (pkgs.writeShellScriptBin "sys-upgrade" (builtins.readFile ./config/scripts/nixos-backup.sh))
-    inputs.zen-browser.packages.${pkgs.system}.default
   ];
-
-  programs.imv.enable = true;
-  programs.mpv.enable = true;
-
+  
   programs.fish = {
     plugins = with pkgs.fishPlugins; [
       {

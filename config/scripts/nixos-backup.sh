@@ -23,7 +23,7 @@ echo "📦 Copying files to independent safety backup: $BACKUP_DIR..."
 mkdir -p "$BACKUP_DIR"
 
 # Copy your core configuration assets plus the newly generated lockfile
-cp -r *.nix config flake.lock "$BACKUP_DIR/"
+cp -r config hardware homes workstation *.nix "$BACKUP_DIR/"
 
 echo "🧹 Formatting Nix files with nixfmt..."
 nix run nixpkgs#nixfmt -- *.nix
