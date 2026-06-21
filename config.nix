@@ -19,7 +19,7 @@
   # Login shell.
   users.users.ty.shell = pkgs.fish;
   users.users.root.shell = pkgs.fish;
-  enviroment.shells = with pkgs; [ fish ];
+  environment.shells = with pkgs; [ fish ];
 
   # Kernel PKG + parameters.
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -122,8 +122,6 @@
   };
 
   # Install PKGS with system parameters.
-  programs.hyprland.enable = true;
-  programs.hyprlandwithUWSM.enable = true;
   programs.regreet.enable = true;
   programs.tmux.enable = true;
   programs.fish.enable = true;
@@ -132,7 +130,11 @@
   programs.zoxide.enable = true;
   programs.atuin.enable = true;
   programs.starship.enable = true;
-  programs.hyprpolkitagent.enable = true;
+
+  programs.hyprland = {
+    enable = true;
+    withUWSM = true;
+  };
 
   programs.neovim = {
     enable = true;
@@ -171,7 +173,7 @@
       hyprshot
       hyprpaper
       hyprpicker
-      hyprpm
+      hyprpolkitagent
       waybar
       wofi
       mako
@@ -188,7 +190,7 @@
       mpv
       imv
       wl-clipboard
-      clip-hist
+      cliphist
       wget
       pfetch
       btop
@@ -202,7 +204,7 @@
 
   hardware.nvidia = {
     modesetting.enable = true;
-    powerManagment.enable = false;
+    powerManagement.enable = false;
     open = false;
 
   };
@@ -224,15 +226,7 @@
     config.common.default = "*";
   };
 
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.greetd.regreet}"/bin/regreet;
-	user = "greeter";
-      };
-    };
-  };
+  services.greetd.enable = true;
 
    # X11 + WM.
    # services.xserver = {
