@@ -186,6 +186,7 @@
       pavucontrol
       ghostty
       brave
+      vesktop
       qalculate-gtk
       mpv
       imv
