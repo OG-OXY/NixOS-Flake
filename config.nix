@@ -57,6 +57,24 @@
     };
   };
 
+  # NIX-PKG-Manager parameters.
+  nix = {
+    settings = {
+      auto-optimise-store = true;
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
+    };
+
+    # Garbage collection.
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
+  };
+
   # User account.
   security.sudo = {
     enable = true;
@@ -91,24 +109,6 @@
       "tcpdump"
     ];
     packages = with pkgs; [ ];
-  };
-
-  # NIX-PKG-Manager parameters.
-  nix = {
-    settings = {
-      auto-optimise-store = true;
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-    };
-
-    # Garbage collection.
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 14d";
-    };
   };
 
   # Networking PKGS + parameters.
@@ -195,8 +195,6 @@
       pfetch
       btop
       fastfetch
-      dysk
-      tree
     ])
     ++ [
       inputs.zen-browser.packages.${pkgs.system}.default
