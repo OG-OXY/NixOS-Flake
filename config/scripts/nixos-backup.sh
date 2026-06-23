@@ -28,6 +28,9 @@ cp -r config hardware homes workspace *.nix *.lock "$BACKUP_DIR/"
 # Copy user specific configurations that cant be configured through "config".
 cp -r /home/ty/.config "$BACKUP_DIR/"
 
+# Copy user scripts.
+cp -r /home/ty/.local/bin "$BACKUP_DIR/"
+
 echo "🧹 Formatting Nix files with nixfmt..."
 nix run nixpkgs#nixfmt -- *.nix
 
