@@ -252,11 +252,10 @@
   # };
   # };
 
-  # Sound.
   services.pipewire = {
     enable = true;
-    pulse.enable = true;
     alsa.enable = true;
+    pulse.enable = true;
   };
 
   # Zram swap.
