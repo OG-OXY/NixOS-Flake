@@ -75,16 +75,6 @@
     };
   };
 
-  security.doas = {
-    enable = true;
-    extraRules = [{
-      users = [ "ty" ];
-      groups = [ "wheel" ];
-      keepEnv = true;
-      noPass = true;
-    }];
-  };
-
   # User account.
   security.sudo = {
     enable = true;
@@ -144,15 +134,6 @@
   programs.hyprland = {
     enable = true;
     withUWSM = true;
-  };
-
-  programs.fish.shellAliases = {
-    sudo = "doas";
-    sy = "sudo y";
-  };
-
-  programs.bash.shellAliases = {
-    sudo = "doas";
   };
 
   programs.neovim = {
