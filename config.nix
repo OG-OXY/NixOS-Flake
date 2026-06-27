@@ -152,6 +152,12 @@
     };
   };
 
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+    pinentryPackage = pkgs.pinentry-gnome3;
+  };
+
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
@@ -179,10 +185,10 @@
       mako
       wl-clipboard
       cliphist
-      rbw
       rofi-rbw-wayland
+      rbw
       wtype
-      pinentry-curses
+      pinentry-gnome3
       pavucontrol
       ghostty
       vesktop
@@ -190,6 +196,7 @@
       mpv
       imv
       wl-clipboard
+      wtype
       cliphist
       wget
       pfetch
@@ -218,6 +225,8 @@
     };
   };
 
+  hardware.keyboard.qmk.enable = true;
+
   xdg.portal = {
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
@@ -225,29 +234,6 @@
   };
 
   services.greetd.enable = true;
-
-  # X11 + WM.
-  # services.xserver = {
-  # enable = true;
-  # windowManager.qtile.enable = true;
-  # displayManager.sessionCommands = ''
-  # xwallpaper --output DP-1 --zoom /home/ty/Media/Pictures/wpapers/gruvbox-rainbow-nix.png --output HDMI-1 --zoom /home/ty/Media/Pictures/wpapers/gruvbox-rainbow-nix.png
-  # xset r rate 200 45 &
-  # '';
-  # };
-
-  # Compositor.
-  # services.picom = {
-  # enable = true;
-  # settings = {
-  # fading = true;
-  # shadows = true;
-  # blur = true;
-  # active-opacity = 1.0;
-  # inactive-opacity = 0.95;
-  # corner-radius = 0;
-  # };
-  # };
 
   services.pipewire = {
     enable = true;
@@ -279,8 +265,7 @@
 
   security.polkit.enable = true;
 
-  # 1. Enable the massive, community-maintained universal QMK/DFU/Bootloader ruleset
-  hardware.keyboard.qmk.enable = true;
+  services.gnome.gnome-keyring.enable = true;
 
   # 2. Keep your custom high-priority launcher and HID rules
   services.udev.packages = [
@@ -288,18 +273,22 @@
       name = "keychron-udev-rules";
       destination = "/etc/udev/rules.d/50-keychron.rules";
       text = ''
-        # KEYCHRON KEYBOARDS & RECEIVERS (Factory ZMK, VIA, or QMK Modes)
-        KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
-        SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+                # KEYCHRON KEYBOARDS & RECEIVERS (Factory ZMK, VIA, or QMK Modes)
+                KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+                SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
 
-        # VIAL COMPATIBILITY LAYER
-        KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+                # KEYCHRON KEYBOARDS & RECEIVERS (Factory ZMK, VIA, or QMK Modes)
+                KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="d028", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+                SUBSYSTEM=="usb", ATTRS{idVendor}=="3434", ATTRS{idProduct}=="d028", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
 
-        # UNIVERSAL MOUSE / POINTER INPUTS
-        KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="*input*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+        	# VIAL COMPATIBILITY LAYER
+                KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
 
-        # Catch-all for the specific GigaDevice/Keychron DFU chip variant
-        SUBSYSTEMS=="usb", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="df11", MODE="0660", GROUP="users", TAG+="uaccess"
+                # UNIVERSAL MOUSE / POINTER INPUTS
+                KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="*input*", MODE="0660", GROUP="users", TAG+="uaccess", TAG+="udev-acl"
+
+                # Catch-all for the specific GigaDevice/Keychron DFU chip variant
+                SUBSYSTEMS=="usb", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="df11", MODE="0660", GROUP="users", TAG+="uaccess"
       '';
     })
   ];

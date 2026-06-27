@@ -12,7 +12,7 @@ if [ "$EUID" -eq 0 ]; then
 fi
 
 # Jump directly into your active configuration directory
-cd "$HOME/nixos"
+cd "$HOME/NixOS/nixos"
 
 echo "🔄 Fetching latest channel inputs and updating flake.lock..."
 nix flake update

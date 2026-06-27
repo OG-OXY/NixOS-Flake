@@ -75,4 +75,11 @@
       continuum
     ];
   };
+
+  programs.rbw = {
+    enable = true;
+    settings = {
+      email = "ogoxy.yt@gmail.com";
+    };
+  };
 }
