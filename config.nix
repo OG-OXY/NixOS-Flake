@@ -75,6 +75,16 @@
     };
   };
 
+  security.doas = {
+    enable = true;
+    extraRules = [{
+      users = [ "ty" ];
+      groups = [ "wheel" ];
+      keepEnv = true;
+      noPass = true;
+    }];
+  };
+
   # User account.
   security.sudo = {
     enable = true;
@@ -136,6 +146,15 @@
     withUWSM = true;
   };
 
+  programs.fish.shellAliases = {
+    sudo = "doas";
+    sy = "sudo y";
+  };
+
+  programs.bash.shellAliases = {
+    sudo = "doas";
+  };
+
   programs.neovim = {
     enable = true;
     defaultEditor = true;
@@ -176,28 +195,25 @@
   # Install system PKGS.
   environment.systemPackages =
     (with pkgs; [
-      hyprshot
-      hyprpaper
-      hyprpicker
       hyprpolkitagent
-      waybar
-      wofi
-      mako
-      wl-clipboard
-      cliphist
-      rofi-rbw-wayland
-      rbw
-      wtype
       pinentry-gnome3
+      waybar
       pavucontrol
+      mako
+      wofi
+      rofi-rbw-wayland
       ghostty
       vesktop
       qalculate-gtk
+      rbw
+      wl-clipboard
+      cliphist
+      wtype
+      hyprshot
+      hyprpaper
+      hyprpicker
       mpv
       imv
-      wl-clipboard
-      wtype
-      cliphist
       wget
       pfetch
       btop
