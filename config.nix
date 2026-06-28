@@ -181,11 +181,11 @@
   # Install system PKGS.
   environment.systemPackages =
     (with pkgs; [
-      hyprpolkitagent
-      pinentry-gnome3
       nh
       nix-output-monitor
       nvd
+      hyprpolkitagent
+      pinentry-gnome3
       waybar
       mako
       pavucontrol
