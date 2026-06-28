@@ -50,6 +50,9 @@ if ! git diff-index --quiet HEAD --; then
     echo "💾 Changes detected. Committing lockfile and script mutations..."
     git commit -m "System auto-upgrade & lock refresh: $(date +'%Y-%m-%d %H:%M')"
     
+    echo "⏳ Waiting 10 seconds for NetworkManager to reconnect..."
+    sleep 10
+    
     echo "🚀 Pushing configuration updates upstream..."
     git push
 else
