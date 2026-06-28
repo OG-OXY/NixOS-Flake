@@ -91,6 +91,8 @@
     ];
   };
 
+  security.polkit.enable = true;
+
   # User parameters.
   users.mutableUsers = true;
   users.users.ty = {
@@ -108,7 +110,8 @@
       "wireshark"
       "tcpdump"
     ];
-    packages = with pkgs; [ ];
+    packages = with pkgs; [
+    ];
   };
 
   # Networking PKGS + parameters.
@@ -116,6 +119,7 @@
   networking.networkmanager.enable = true;
   networking.networkmanager.wifi.backend = "iwd";
 
+  # Force electron apps to wayland and turn off hardware cursors.
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     WLR_NO_HARDWARE_CURSORS = "1";
@@ -134,6 +138,7 @@
   programs.hyprland = {
     enable = true;
     withUWSM = true;
+    xwayland.enable = true;
   };
 
   programs.neovim = {
@@ -178,38 +183,36 @@
     (with pkgs; [
       hyprpolkitagent
       pinentry-gnome3
+      nh
+      nix-output-monitor
+      nvd
       waybar
-      pavucontrol
       mako
-      wofi
+      pavucontrol
       rofi-rbw-wayland
-      ghostty
-      vesktop
-      qalculate-gtk
-      rbw
       wl-clipboard
       cliphist
       wtype
+      wget
+      wofi
+      ghostty
+      rbw
+      mpv
+      imv
       hyprshot
       hyprpaper
       hyprpicker
-      mpv
-      imv
-      wget
-      pfetch
+      vesktop
+      qalculate-gtk
       btop
       fastfetch
+      jq
     ])
     ++ [
       inputs.zen-browser.packages.${pkgs.system}.default
     ];
 
-  hardware.nvidia = {
-    modesetting.enable = true;
-    powerManagement.enable = false;
-    open = false;
-
-  };
+  hardware.keyboard.qmk.enable = true;
 
   hardware.bluetooth = {
     enable = true;
@@ -222,16 +225,16 @@
     };
   };
 
-  hardware.keyboard.qmk.enable = true;
-
   xdg.portal = {
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
     config.common.default = "*";
   };
 
+  # Display Manager.
   services.greetd.enable = true;
 
+  # Sound.
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -258,13 +261,10 @@
     };
   };
 
+  # Port for SSH opened.
   networking.firewall.allowedTCPPorts = [ 22 ];
 
-  security.polkit.enable = true;
-
-  services.gnome.gnome-keyring.enable = true;
-
-  # 2. Keep your custom high-priority launcher and HID rules
+  # Udev rules for keyboard/mouse permissions.
   services.udev.packages = [
     (pkgs.writeTextFile {
       name = "keychron-udev-rules";
@@ -289,6 +289,34 @@
       '';
     })
   ];
+
+  services.gnome.gnome-keyring.enable = true;
+  services.power-profiles-daemon.enable = true;
+
+  systemd.user.services.waybar = {
+    unitConfig = {
+      After = [ "graphical-session.target" ];
+      Requires = [ "dbus.socket" ];
+    };
+    serviceConfig = {
+      ExecStartPre = "${pkgs.glib}/bin/gdbus wait --system net.hadess.PowerProfiles";
+    };
+  };
+
+  systemd.user.services.rbw-autounlock = {
+    description = "Securely unlock Bitwarden Vault on Hyprland Startup";
+    wantedBy = [ "graphical-session.target" ];
+    unitConfig = {
+      After = [ "graphical-session.target" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.rbw}/bin/rbw unlock";
+      RemainAfterExit = false;
+    };
+  };
+
   # NixOS VM sandbox.
   virtualisation.vmVariant = {
     users.users.ty.password = "test";
