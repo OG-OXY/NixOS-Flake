@@ -32,6 +32,8 @@
     "vfio"
     "vfio_iommu_type1"
     "vfio_pci"
+    "i2c-dev"
+    "i2c-piix4"
   ];
 
   # Systemctl parameters.
@@ -212,9 +214,16 @@
     ++ [
       inputs.zen-browser.packages.${pkgs.system}.default
     ];
+  
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+    config.common.default = "*";
+  };
 
+  hardware.i2c.enable = true;
   hardware.keyboard.qmk.enable = true;
-
+  
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
@@ -225,11 +234,11 @@
       };
     };
   };
-
-  xdg.portal = {
+  
+  services.hardware.openrgb = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
-    config.common.default = "*";
+    package = pkgs.openrgb-with-all-plugins;
+    motherboard = "amd";
   };
 
   # Display Manager.
@@ -267,6 +276,7 @@
 
   # Udev rules for keyboard/mouse permissions.
   services.udev.packages = [
+    pkgs.openrgb
     (pkgs.writeTextFile {
       name = "keychron-udev-rules";
       destination = "/etc/udev/rules.d/50-keychron.rules";
