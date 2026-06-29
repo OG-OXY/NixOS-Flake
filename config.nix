@@ -130,10 +130,10 @@
   programs.tmux.enable = true;
   programs.fish.enable = true;
   programs.yazi.enable = true;
-  programs.virt-manager.enable = true;
+  programs.starship.enable = true;
   programs.zoxide.enable = true;
   programs.atuin.enable = true;
-  programs.starship.enable = true;
+  programs.virt-manager.enable = true;
 
   programs.hyprland = {
     enable = true;
@@ -181,32 +181,33 @@
   # Install system PKGS.
   environment.systemPackages =
     (with pkgs; [
-      nh
       nix-output-monitor
       nvd
+      nh
+      tealdeer
       hyprpolkitagent
       pinentry-gnome3
-      waybar
-      mako
-      pavucontrol
       rofi-rbw-wayland
       wl-clipboard
       cliphist
       wtype
-      wget
+      waybar
+      mako
       wofi
       ghostty
-      rbw
       mpv
       imv
       hyprshot
       hyprpaper
       hyprpicker
-      vesktop
-      qalculate-gtk
       btop
       fastfetch
+      wget
       jq
+      rbw
+      vesktop
+      pavucontrol
+      qalculate-gtk
     ])
     ++ [
       inputs.zen-browser.packages.${pkgs.system}.default

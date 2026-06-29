@@ -5,6 +5,7 @@ if status is-interactive
   
   abbr -a sy sudo yazi
   abbr -a nrs sudo nixos-rebuild switch --flake .#nixos
+  abbr -a nrsu sudo nixos-rebuild switch --upgrade --flake .#nixos
   
   fastfetch
   direnv hook fish | source

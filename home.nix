@@ -20,7 +20,7 @@
 
   home.packages = [
     # This dynamically reads your script file and turns it into a system binary
-    (pkgs.writeShellScriptBin "sys-upgrade" (builtins.readFile ./config/scripts/nixos-backup.sh))
+    (pkgs.writeShellScriptBin "nix backup" (builtins.readFile ./config/scripts/nix-backup.sh))
   ];
 
   programs.fish = {
