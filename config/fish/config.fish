@@ -11,7 +11,6 @@ if status is-interactive
   abbr -a nrs sudo nixos-rebuild switch --flake .#nixos
   abbr -a nrsu sudo nixos-rebuild switch --upgrade --flake .#nixos
   abbr -a nb nix backup
-  alias nix build = nom build
 
   fastfetch
   direnv hook fish | source
