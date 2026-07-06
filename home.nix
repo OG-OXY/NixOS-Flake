@@ -5,10 +5,8 @@
   inputs,
   ...
 }:
-
 {
   home.stateVersion = "26.11";
-
   home.file = {
     ".config/ghostty".source = ./config/ghostty;
     ".config/fish".source = ./config/fish;
@@ -17,9 +15,7 @@
     ".config/btop".source = ./config/btop;
     ".config/atuin/config.toml".source = ./config/atuin/config.toml;
   };
-
   home.packages = [
-    # This dynamically reads your script file and turns it into a system binary
     (pkgs.writeShellScriptBin "nix backup" (builtins.readFile ./config/scripts/nix-backup.sh))
   ];
 

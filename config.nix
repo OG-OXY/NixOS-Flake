@@ -151,6 +151,18 @@
     };
   };
 
+  programs.ssh = {
+    extraConfig = ''
+      Host phone
+        HostName 192.168.1.X
+        Port 8022
+        User nix-on-droid
+        StrictHostKeyChecking no
+        UserKnownHostsFile /dev/null
+    '';
+  };
+  
+
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = false;
@@ -211,7 +223,7 @@
 	];
       };
       localConf = ''
-        s
+        
       '';
     };
   };
@@ -311,8 +323,11 @@
     };
   };
 
+  services.tailscale.enable = true;
+
   # Port for SSH opened.
   networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall.trustedInterfaces = [ "tailscale0" ];
 
   # Udev rules for keyboard/mouse permissions.
   services.udev.packages = [
