@@ -153,12 +153,21 @@
 
   programs.ssh = {
     extraConfig = ''
-      Host phone
-        HostName 192.168.1.X
+      Host Nix-On-Droid
+        HostName 100.71.190.30
         Port 8022
         User nix-on-droid
         StrictHostKeyChecking no
+	RequestTTY yes
         UserKnownHostsFile /dev/null
+      
+      Host NixOS
+        HostName 100.99.131.97
+	Port 22
+	User ty
+	StrictHostKeyChecking no
+	RequestTTY yes
+	UserKnownHostsFile /dev/null
     '';
   };
   
