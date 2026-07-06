@@ -13,7 +13,6 @@
     {
       devShells.${system}.default = pkgs.mkShell {
         name = "QMK-ENV";
-        
         nativeBuildInputs = with pkgs; [
           git
           gnumake
@@ -26,7 +25,6 @@
 
         shellHook = ''
           echo "⚡ QMK Development Environment Loaded ⚡"
-          # Ensures QMK knows where to look if it needs internal dependencies
           export QMK_HOME="$PWD/vial-qmk" 
         '';
       };

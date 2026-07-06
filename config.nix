@@ -11,9 +11,9 @@
 
 {
   imports = [
-    ./hardware/hardware.nix
-    ./hardware/amd.nix
-    ./hardware/nvidia.nix
+    ./modules/hardware/hardware.nix
+    ./modules/hardware/amd.nix
+    ./modules/hardware/nvidia.nix
   ];
 
   # Login shell.
@@ -27,15 +27,7 @@
     "amd_iommu=on"
     "iommu=pt"
   ];
-  boot.kernelModules = [
-    "kvm-amd"
-    "vfio"
-    "vfio_iommu_type1"
-    "vfio_pci"
-    "i2c-dev"
-    "i2c-piix4"
-  ];
-
+  
   # Systemctl parameters.
   boot.kernel.sysctl = {
     "kernel.sysrq" = true;
@@ -161,7 +153,7 @@
 
   programs.gnupg.agent = {
     enable = true;
-    enableSSHSupport = true;
+    enableSSHSupport = false;
     pinentryPackage = pkgs.pinentry-gnome3;
   };
 
@@ -173,8 +165,55 @@
   fonts = {
     packages = with pkgs; [
       nerd-fonts.jetbrains-mono
+      nerd-fonts.fira-code
+      font-awesome
+      comic-mono
+      fantasque-sans-mono
+      cozette
+      monaspace
+      inter
     ];
-    fontconfig.enable = true;
+    fontconfig = {
+      enable = true;
+      defaultFonts = {
+        monospace = [
+	  "JetBrainsMono Nerd Font"
+	  "Font Awesome 6 Free"
+	  "Font Awesome 6 Brands"
+	  "FiraCode Nerd Font"
+          "Comic Mono"
+          "Fantasque Sans Mono"
+          "Cozette"
+          "Monaspace Neon"
+	  "Inter"
+	];
+	sansSerif = [
+	  "Inter"
+          "Font Awesome 6 Free"
+          "Font Awesome 6 Brands"
+          "JetBrainsMono Nerd Font"
+          "FiraCode Nerd Font"
+          "Comic Mono"
+          "Fantasque Sans Mono"
+          "Cozette"
+          "Monaspace Neon"
+	];
+	serif = [
+          "Comic Mono"
+          "Font Awesome 6 Free"
+          "Font Awesome 6 Brands"
+          "JetBrainsMono Nerd Font"
+          "FiraCode Nerd Font"
+          "Inter"
+          "Fantasque Sans Mono"
+          "Cozette"
+          "Monaspace Neon"
+	];
+      };
+      localConf = ''
+        s
+      '';
+    };
   };
 
   # System parameters (Converted to relative path for Flake compliance)
@@ -207,6 +246,7 @@
       wget
       jq
       rbw
+      bitwarden-desktop
       vesktop
       pavucontrol
       qalculate-gtk
@@ -323,10 +363,15 @@
     };
     serviceConfig = {
       Type = "oneshot";
+      Environment = [
+        "WAYLAND_DISPLAY=wayland-0"
+        "DISPLAY=:0"
+      ];
       ExecStart = "${pkgs.rbw}/bin/rbw unlock";
       RemainAfterExit = false;
     };
   };
+  
 
   # NixOS VM sandbox.
   virtualisation.vmVariant = {

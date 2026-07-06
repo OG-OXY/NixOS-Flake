@@ -11,15 +11,13 @@
     };
   };
 
-  outputs =
-    {
+  outputs = {
       self,
       nixpkgs,
       nixpkgs-stable,
       home-manager,
       ...
-    }@inputs:
-    {
+  }@inputs: {
       nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs self; };
         modules = [
@@ -27,9 +25,8 @@
           {
             nixpkgs.hostPlatform = "x86_64-linux";
             nixpkgs.config.allowUnfree = true;
-            nixpkgs.overlays = [
-              (
-                final: prev:
+            nixpkgs.config.permittedInsecurePackages = [ "electron-39.8.10" ];   nixpkgs.overlays = [
+              (final: prev:
                 let
                   stablePkgs = import nixpkgs-stable {
                     inherit (prev) system;
@@ -37,10 +34,8 @@
                   };
                 in
                 {
-                  # List to lock to last version of nixpkgs-unstable.
                   cantarell-fonts = stablePkgs.cantarell-fonts;
-
-                }
+		}
               )
             ];
           }
@@ -49,9 +44,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "backup";
-            home-manager.users.root = import ./homes/root-home.nix;
-            home-manager.users.ty = import ./homes/ty-home.nix;
-            home-manager.extraSpecialArgs = { inherit inputs self; };
+            home-manager.users.root = import ./modules/homes/root-home.nix;      home-manager.users.ty = import ./modules/homes/ty-home.nix;          home-manager.extraSpecialArgs = { inherit inputs self; };
           }
         ];
       };

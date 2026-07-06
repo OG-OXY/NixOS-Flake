@@ -9,13 +9,13 @@
 {
   home.stateVersion = "26.11";
   
-  imports = [ ../home.nix ];
+  imports = [ ../../home.nix ];
   
   home.sessionPath = [
     "$HOME/.local/bin"
   ];
   
   home.file = {
-    ".config/starship.toml".source = ../config/starship/starship.toml;
+    ".config/starship.toml".source = ../../config/starship/starship.toml;
   };
 }
