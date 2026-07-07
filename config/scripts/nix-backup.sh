@@ -22,14 +22,7 @@ BACKUP_DIR="$HOME/.nix-backup/$(date +%Y-%m-%d_%H-%M)"
 echo "📦 Copying files to independent safety backup: $BACKUP_DIR..."
 mkdir -p "$BACKUP_DIR"
 
-# Copy your core configuration assets plus the newly generated lockfile.
-cp -r config hardware homes workspace *.nix *.lock "$BACKUP_DIR/"
-
-# Copy user specific configurations that cant be configured through "config".
-cp -r /home/ty/.config "$BACKUP_DIR/"
-
-# Copy user scripts.
-cp -r /home/ty/.local/bin "$BACKUP_DIR/"
+cp -r ~/.config ~/.local/bin config flakes modules *.nix *.lock "$BACKUP_DIR/"
 
 echo "🧹 Formatting Nix files with nixfmt..."
 nix run nixpkgs#nixfmt -- *.nix
@@ -42,7 +35,7 @@ sudo nixos-rebuild switch --flake .#nixos
 
 # Reclaim user ownership of files sudo or the builder modified.
 echo "🔑 Restoring file ownership permissions..."
-sudo chown -R ty:users .
+sudo chown -R ty:users /home/ty
 
 # 2. Git Commit and Push tracking.
 echo "📝 Checking for configuration changes to commit..."

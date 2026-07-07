@@ -16,7 +16,7 @@
     ".config/atuin/config.toml".source = ./config/atuin/config.toml;
   };
   home.packages = [
-    (pkgs.writeShellScriptBin "nix backup" (builtins.readFile ./config/scripts/nix-backup.sh))
+    (pkgs.writeShellScriptBin "nix-backup" (builtins.readFile ./config/scripts/nix-backup.sh))
   ];
 
   programs.fish = {

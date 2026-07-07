@@ -27,7 +27,7 @@
     "amd_iommu=on"
     "iommu=pt"
   ];
-  
+
   # Systemctl parameters.
   boot.kernel.sysctl = {
     "kernel.sysrq" = true;
@@ -153,24 +153,23 @@
 
   programs.ssh = {
     extraConfig = ''
-      Host Nix-On-Droid
-        HostName 100.71.190.30
-        Port 8022
-        User nix-on-droid
-        StrictHostKeyChecking no
-	RequestTTY yes
-        UserKnownHostsFile /dev/null
-      
-      Host NixOS
-        HostName 100.99.131.97
-	Port 22
-	User ty
-	StrictHostKeyChecking no
-	RequestTTY yes
-	UserKnownHostsFile /dev/null
+            Host Nix-On-Droid
+              HostName 100.71.190.30
+              Port 8022
+              User nix-on-droid
+              StrictHostKeyChecking no
+      	RequestTTY yes
+              UserKnownHostsFile /dev/null
+            
+            Host NixOS
+              HostName 100.99.131.97
+      	Port 22
+      	User ty
+      	StrictHostKeyChecking no
+      	RequestTTY yes
+      	UserKnownHostsFile /dev/null
     '';
   };
-  
 
   programs.gnupg.agent = {
     enable = true;
@@ -198,18 +197,18 @@
       enable = true;
       defaultFonts = {
         monospace = [
-	  "JetBrainsMono Nerd Font"
-	  "Font Awesome 6 Free"
-	  "Font Awesome 6 Brands"
-	  "FiraCode Nerd Font"
+          "JetBrainsMono Nerd Font"
+          "Font Awesome 6 Free"
+          "Font Awesome 6 Brands"
+          "FiraCode Nerd Font"
           "Comic Mono"
           "Fantasque Sans Mono"
           "Cozette"
           "Monaspace Neon"
-	  "Inter"
-	];
-	sansSerif = [
-	  "Inter"
+          "Inter"
+        ];
+        sansSerif = [
+          "Inter"
           "Font Awesome 6 Free"
           "Font Awesome 6 Brands"
           "JetBrainsMono Nerd Font"
@@ -218,8 +217,8 @@
           "Fantasque Sans Mono"
           "Cozette"
           "Monaspace Neon"
-	];
-	serif = [
+        ];
+        serif = [
           "Comic Mono"
           "Font Awesome 6 Free"
           "Font Awesome 6 Brands"
@@ -229,10 +228,10 @@
           "Fantasque Sans Mono"
           "Cozette"
           "Monaspace Neon"
-	];
+        ];
       };
       localConf = ''
-        
+
       '';
     };
   };
@@ -275,7 +274,7 @@
     ++ [
       inputs.zen-browser.packages.${pkgs.system}.default
     ];
-  
+
   xdg.portal = {
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
@@ -284,7 +283,7 @@
 
   hardware.i2c.enable = true;
   hardware.keyboard.qmk.enable = true;
-  
+
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
@@ -295,7 +294,7 @@
       };
     };
   };
-  
+
   services.hardware.openrgb = {
     enable = true;
     package = pkgs.openrgb-with-all-plugins;
@@ -395,7 +394,6 @@
       RemainAfterExit = false;
     };
   };
-  
 
   # NixOS VM sandbox.
   virtualisation.vmVariant = {
