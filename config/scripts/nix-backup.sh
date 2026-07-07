@@ -17,13 +17,6 @@ cd "$HOME/NixOS/nixos"
 echo "🔄 Fetching latest channel inputs and updating flake.lock..."
 nix flake update
 
-# 1. Safety backup directory.
-BACKUP_DIR="$HOME/.nix-backup/$(date +%Y-%m-%d_%H-%M)"
-echo "📦 Copying files to independent safety backup: $BACKUP_DIR..."
-mkdir -p "$BACKUP_DIR"
-
-cp -r ~/.config ~/.local/bin .git config flakes modules *.nix *.lock "$BACKUP_DIR/"
-
 echo "🧹 Formatting Nix files with nixfmt..."
 nix run nixpkgs#nixfmt -- *.nix
 
@@ -51,3 +44,11 @@ if ! git diff-index --quiet HEAD --; then
 else
     echo "✅ No new updates or package upgrades detected. Tree is clean."
 fi
+
+# 1. Safety backup directory.
+BACKUP_DIR="$HOME/.nix-backup/$(date +%Y-%m-%d_%H-%M)"
+echo "📦 Copying files to independent safety backup: $BACKUP_DIR..."
+mkdir -p "$BACKUP_DIR"
+
+cp -r ~/.config ~/.local/bin ~/NixOS/nixos "$BACKUP_DIR/"
+echo "UPGRADE COMPLETE"
