@@ -22,7 +22,7 @@ BACKUP_DIR="$HOME/.nix-backup/$(date +%Y-%m-%d_%H-%M)"
 echo "📦 Copying files to independent safety backup: $BACKUP_DIR..."
 mkdir -p "$BACKUP_DIR"
 
-cp -r ~/.config ~/.local/bin config flakes modules *.nix *.lock "$BACKUP_DIR/"
+cp -r ~/.config ~/.local/bin .git config flakes modules *.nix *.lock "$BACKUP_DIR/"
 
 echo "🧹 Formatting Nix files with nixfmt..."
 nix run nixpkgs#nixfmt -- *.nix
