@@ -3,7 +3,7 @@ set -gx VISUAL nvim
 if status is-interactive
   set -g fish_greeting "Welcome to NixOS!"
   set -g fish_handle_reflow 1
-  alias ls ls -a
+  abbr -a ls ls -a
   abbr -a cds cd ~/NixOS/nixos
   abbr -a ga git add -A
   abbr -a gc git commit -m '"'
@@ -17,6 +17,10 @@ if status is-interactive
   abbr -a sy sudo yazi
   abbr -a nrs sudo nixos-rebuild switch --flake .#nixos
   abbr -a nrsu sudo nixos-rebuild switch --upgrade --flake .#nixos
+  abbr -a nrt sudo nixos-rebuild test --flake .#nixos
+  abbr -a nrtu sudo nixos-rebuild test --upgrade --flake .#nixos
+  abbr -a nrvm sudo nixos-rebuild build-vm --flake .#nixos
+  abbr -a vm ./result/bin/run-nixos-vm
   abbr -a nb nix-backup
   abbr -a ts sudo tailscale up
   fastfetch

@@ -110,8 +110,11 @@
 
   # Networking PKGS + parameters.
   networking.hostName = "nixos";
-  networking.networkmanager.enable = true;
-  networking.networkmanager.wifi.backend = "iwd";
+  networking.networkmanager = {
+    enable = true;
+    wifi.backend = "iwd";
+    dns = "dnsmasq";
+  };
 
   # Force electron apps to wayland and turn off hardware cursors.
   environment.sessionVariables = {
@@ -245,6 +248,7 @@
       nix-output-monitor
       nvd
       nh
+      fh
       tealdeer
       hyprpolkitagent
       pinentry-gnome3
@@ -273,6 +277,7 @@
     ])
     ++ [
       inputs.zen-browser.packages.${pkgs.system}.default
+      inputs.astrovim-nvf.packages.${pkgs.system}.default
     ];
 
   xdg.portal = {
@@ -436,6 +441,7 @@
 
   # Disabled PKGS.
   programs.nano.enable = false;
+  services.resolved.enable = false;
   services.libinput.enable = false;
   services.printing.enable = false;
 
