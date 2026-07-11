@@ -17,7 +17,9 @@
         modules = [
           {
             config.vim = {
-              # Global Options & Themes
+              viAlias = false;
+	      vimAlias = false;
+	      # Global Options & Themes
               options = {
                 shiftwidth = 2;
                 tabstop = 2;
@@ -65,7 +67,7 @@
               };
 
               tabline.nvimBufferline.enable = true;
-              autocomplete.nvim-cmp.enable = true;
+              autocomplete.blink-cmp.enable = true;
               snippets.luasnip.enable = true;
 
               keymaps = [
@@ -79,10 +81,12 @@
               ];
 
               lsp.enable = true;
+	      lsp.formatOnSave = true;
               # Languages and Automatic LSPs
               languages = {
                 enableTreesitter = true;
-                enableExtraDiagnostics = true;
+		enableFormat = true;
+		enableExtraDiagnostics = true;
                 nix.enable = true;
                 fish.enable = true;
                 bash.enable = true;
@@ -91,11 +95,7 @@
                 markdown.enable = true;
                 html.enable = true;
                 css.enable = true;
-                lua = {
-                  enable = true;
-                  lsp.enable = true;
-                  treesitter.enable = true;
-                };
+                lua.enable = true;
               };
 
               notes = {
@@ -138,7 +138,12 @@
       };
     in {
       # Export the package so your main system flake can read it
-      packages.${system}.default = customNeovim.neovim;
+      packages.${system}.default = pkgs.symlinkJoin {
+        name = "nvf-wrapped";
+        paths = [ customNeovim.neovim ];
+        postBuild = ''
+          ln -s $out/bin/nvim $out/bin/nvf
+        '';
+      };
     };
 }
-

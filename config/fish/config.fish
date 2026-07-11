@@ -1,3 +1,4 @@
+fish_add_path ~/.local/bin ~/.local/state ~/.local/share
 set -gx EDITOR nvim
 set -gx VISUAL nvim
 if status is-interactive
@@ -10,6 +11,8 @@ if status is-interactive
   abbr -a gp git push -u origin master
   abbr -a gpf git push -u --force origin master
   abbr -a yz yazi
+  abbr -a nf nvf
+  abbr -a snf sudoedit nvf
   abbr -a nv nvim
   abbr -a snv sudoedit nvim
   abbr -a v vis

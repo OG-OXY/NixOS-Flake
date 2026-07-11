@@ -5,7 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/567a49d1913ce81ac6e9582e3553dd90a955875f";
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
-    astrovim-nvf.url = "path:./flakes/nvf";
+    nvf.url = "path:./flakes/NVF";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,10 +28,10 @@
           {
             nixpkgs.hostPlatform = "x86_64-linux";
             nixpkgs.config.allowUnfree = true;
-            nixpkgs.config.permittedInsecurePackages = [ "electron-39.8.10" ];
+            nixpkgs.config.permittedInsecurePackages = [ 
+	    "electron-39.8.10" ];
             nixpkgs.overlays = [
-              (
-                final: prev:
+              (final: prev:
                 let
                   stablePkgs = import nixpkgs-stable {
                     inherit (prev) system;
@@ -43,16 +43,18 @@
                 }
               )
             ];
-          }
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
-            home-manager.users.root = import ./modules/homes/root-home.nix;
-            home-manager.users.ty = import ./modules/homes/ty-home.nix;
-            home-manager.extraSpecialArgs = { inherit inputs self; };
-          }
+	  }
+	  home-manager.nixosModules.home-manager
+	  {
+	    home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              backupFileExtension = "backup";
+              users.root = import ./modules/home/root-home.nix;
+              users.ty = import ./modules/home/ty-home.nix;
+              extraSpecialArgs = { inherit inputs self; };
+            };
+	  }
         ];
       };
     };

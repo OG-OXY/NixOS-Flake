@@ -25,6 +25,8 @@
   
   boot.initrd.kernelModules = [ ];
   
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   boot.kernelModules = [
     "kvm-amd"
     "vfio"
@@ -33,6 +35,21 @@
     "i2c-dev"
     "i2c-piix4"
   ];
+
+  boot.kernelParams = [
+    "processor.max_cstate=0"
+    "amd_idle.max_cstate=0"
+    "amd_iommu=on"
+    "iommu=pt"
+  ];
+
+  boot.kernel.sysctl = {
+    "kernel.sysrq" = true;
+    "vm.swappiness" = 100;
+    "vm.dirty_background_ratio" = 5;
+    "vm.dirty_ratio" = 10;
+    "fs.inotify.max_user_watches" = 524288;
+  };
   
   boot.extraModulePackages = [ ];
   
