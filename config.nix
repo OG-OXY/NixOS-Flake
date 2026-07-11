@@ -34,7 +34,7 @@
       configurationLimit = 30;
     };
   };
-  
+
   # NIX-PKG-Manager parameters.
   nix = {
     settings = {
@@ -136,21 +136,21 @@
     };
     ssh = {
       extraConfig = ''
-        Host Nix-On-Droid
-            HostName 100.71.190.30
-            Port 8022
-            User nix-on-droid
-            StrictHostKeyChecking no
-      	    RequestTTY yes
-            UserKnownHostsFile /dev/null
-            
-        Host NixOS
-            HostName 100.99.131.97
-      	    Port 22
-      	    User ty
-      	    StrictHostKeyChecking no
-      	    RequestTTY yes
-      	    UserKnownHostsFile /dev/null
+          Host Nix-On-Droid
+              HostName 100.71.190.30
+              Port 8022
+              User nix-on-droid
+              StrictHostKeyChecking no
+        	    RequestTTY yes
+              UserKnownHostsFile /dev/null
+              
+          Host NixOS
+              HostName 100.99.131.97
+        	    Port 22
+        	    User ty
+        	    StrictHostKeyChecking no
+        	    RequestTTY yes
+        	    UserKnownHostsFile /dev/null
       '';
     };
     gnupg.agent = {
@@ -169,7 +169,7 @@
     virt-manager.enable = true;
     nano.enable = false;
   };
-  
+
   fonts = {
     packages = with pkgs; [
       nerd-fonts.jetbrains-mono
@@ -230,7 +230,8 @@
   };
 
   # Install system PKGS.
-  environment.systemPackages = (with pkgs; [
+  environment.systemPackages =
+    (with pkgs; [
       hyprpolkitagent
       pinentry-gnome3
       waybar
@@ -267,7 +268,8 @@
       # Formatters.
       nixfmt
       jq
-    ]) ++ [
+    ])
+    ++ [
       inputs.zen-browser.packages.${pkgs.system}.default
       inputs.nvf.packages.${pkgs.system}.default
       inputs.llm-agents.packages.${pkgs.system}.default
@@ -365,7 +367,7 @@
         # Catch-all for the specific GigaDevice/Keychron DFU chip variant
         SUBSYSTEMS=="usb", ATTRS{idVendor}=="2e3c", ATTRS{idProduct}=="df11", MODE="0660", GROUP="users", TAG+="uaccess"
       '';
-     })
+    })
   ];
 
   services.gnome.gnome-keyring.enable = true;
@@ -455,7 +457,7 @@
     libinput.enable = false;
     printing.enable = false;
   };
-  
+
   # Origin NixOS install version, NEVER CHANGE.
   system.stateVersion = "26.05";
 }
