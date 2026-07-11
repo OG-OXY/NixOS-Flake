@@ -114,6 +114,8 @@
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     WLR_NO_HARDWARE_CURSORS = "1";
+    ANTHROPIC_BASE_URL = "http://localhost:8012";
+    ANTHROPIC_API_KEY = "local";
   };
 
   # Install PKGS with system parameters.
@@ -267,9 +269,12 @@
       wtype
       wget
       wget2
-      jq
-      llama-cpp
+      fzf
       ripgrep
+      herdr
+      llama-cpp
+      fd
+      bun
       devenv
       starship
       atuin
@@ -282,6 +287,8 @@
       inputs.nvf.packages.${pkgs.system}.default
       inputs.llm-agents.packages.${pkgs.system}.default
     ];
+  
+  nixpkgs.config.cudaSupport = true;
 
   xdg.portal = {
     enable = true;
@@ -349,6 +356,17 @@
   networking.firewall = {
     allowedTCPPorts = [ 22 ];
     trustedInterfaces = [ "tailscale0" ];
+  };
+
+  services.llama-cpp = {
+    enable = true;
+    settings = {
+      hf-repo = "ggml-org/Qwen2.5-Coder-14B-Q8_0-GGUF";
+      port = 8012;
+      jinja = true;
+      ctx-size = 8192;
+      n-gpu-layers = 99;
+    };
   };
 
   # Udev rules for keyboard/mouse permissions.
