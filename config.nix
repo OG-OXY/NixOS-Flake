@@ -116,6 +116,7 @@
     WLR_NO_HARDWARE_CURSORS = "1";
     ANTHROPIC_BASE_URL = "http://localhost:8012";
     ANTHROPIC_API_KEY = "local";
+    ANTHROPIC_DEFAULT_SONNET_MODEL = "qwen-14b";
   };
 
   # Install PKGS with system parameters.

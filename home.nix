@@ -4,8 +4,7 @@
   xdg.configFile = {
     "ghostty/config".text = ''
       theme = GruvBoxDark
-      font-size = 22
-      background-opacity = 0.95
+      background-opacity = 1.0
     '';
   };
   imports = [
