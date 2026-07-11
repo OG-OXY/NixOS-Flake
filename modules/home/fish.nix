@@ -30,7 +30,7 @@
       ls = "ls -a";
       cds = "cd ~/NixOS/nixos";
       ga = "git add -A";
-      gc = "git commit -m '\"'";
+      gc = "git commit -m \"";
       gp = "git push -u origin master";
       gpf = "git push -u --force origin master";
       yz = "yazi";
