@@ -3,14 +3,16 @@
   programs.fish = {
     enable = true;
     functions = {
-      y = ''
-        set -l tmp (mktemp -t "yazi-cwd.XXXXX")
-        command yazi $argv --cwd-file="$tmp"
-        if set -l cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
-          builtin cd -- "$cwd"
-        end
-        rm -f -- "$tmp"
-      '';
+      y = {
+        body = ''
+          set -l tmp (mktemp -t "yazi-cwd.XXXXX")
+          command yazi $argv --cwd-file="$tmp"
+          if set -l cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+            builtin cd -- "$cwd"
+          end
+          rm -f -- "$tmp"
+        '';
+      };
       gback = {
       description = "Safely undo the last Git commit but keep file changes";
       body = ''
@@ -26,7 +28,7 @@
 
     shellAbbrs = {
       sudo = "doas";
-      su = "doas -i";
+      su = "doas fish";
       ls = "ls -a";
       cds = "cd ~/NixOS/nixos";
       ga = "git add -A";

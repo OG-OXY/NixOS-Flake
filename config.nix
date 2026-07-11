@@ -270,6 +270,9 @@
       jq
       llama-cpp
       ripgrep
+      devenv
+      starship
+      atuin
       # Formatters.
       nixfmt
       jq
