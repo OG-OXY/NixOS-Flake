@@ -117,6 +117,7 @@
       enable = true;
       defaultEditor = true;
     };
+    steam.enable = true;
     direnv = {
       enable = true;
       nix-direnv.enable = true;
@@ -269,6 +270,7 @@
     ]) ++ [
       inputs.zen-browser.packages.${pkgs.system}.default
       inputs.nvf.packages.${pkgs.system}.default
+      inputs.llm-agents.packages.${pkgs.system}.default
     ];
 
   xdg.portal = {

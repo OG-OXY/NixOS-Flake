@@ -78,4 +78,6 @@
       email = "ogoxy.yt@gmail.com";
     };
   };
+  
+  programs.devenv.enable = true;
 }
