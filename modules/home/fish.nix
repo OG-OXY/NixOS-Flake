@@ -97,8 +97,8 @@
   };
 
   home.sessionVariables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
+    EDITOR = "nvf";
+    VISUAL = "nvf";
   };
 
   home.sessionPath = [

@@ -1,5 +1,4 @@
 # Help is in configuration.nix(5) man page, https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-
 {
   config,
   lib,
@@ -7,9 +6,7 @@
   inputs,
   self,
   ...
-}:
-
-{
+}: {
   imports = [
     ./modules/hardware/hardware.nix
     ./modules/hardware/amd.nix
@@ -19,7 +16,7 @@
   # Login shell.
   users.users.ty.shell = pkgs.fish;
   users.users.root.shell = pkgs.fish;
-  environment.shells = with pkgs; [ fish ];
+  environment.shells = with pkgs; [fish];
 
   # Bootloader + GRUB parameters.
   boot.loader = {
@@ -57,21 +54,23 @@
   security = {
     doas = {
       enable = true;
-      extraRules = [{
-        users = [ "ty" ];
-	noPass = true;
-	keepEnv = true;
-      }];
+      extraRules = [
+        {
+          users = ["ty"];
+          noPass = true;
+          keepEnv = true;
+        }
+      ];
     };
     sudo = {
       enable = true;
       extraRules = [
         {
-          groups = [ "wheel" ];
+          groups = ["wheel"];
           commands = [
             {
               command = "ALL";
-              options = [ "NOPASSWD" ];
+              options = ["NOPASSWD"];
             }
           ];
         }
@@ -117,6 +116,8 @@
     ANTHROPIC_BASE_URL = "http://localhost:8012";
     ANTHROPIC_API_KEY = "local";
     ANTHROPIC_DEFAULT_SONNET_MODEL = "qwen-14b";
+    EDITOR = "nvf";
+    VISUAL = "nvf";
   };
 
   # Install PKGS with system parameters.
@@ -149,21 +150,21 @@
     };
     ssh = {
       extraConfig = ''
-          Host Nix-On-Droid
-              HostName 100.71.190.30
-              Port 8022
-              User nix-on-droid
-              StrictHostKeyChecking no
-        	    RequestTTY yes
-              UserKnownHostsFile /dev/null
-              
-          Host NixOS
-              HostName 100.99.131.97
-        	    Port 22
-        	    User ty
-        	    StrictHostKeyChecking no
-        	    RequestTTY yes
-        	    UserKnownHostsFile /dev/null
+        Host Nix-On-Droid
+            HostName 100.71.190.30
+            Port 8022
+            User nix-on-droid
+            StrictHostKeyChecking no
+           RequestTTY yes
+            UserKnownHostsFile /dev/null
+
+        Host NixOS
+            HostName 100.99.131.97
+           Port 22
+           User ty
+           StrictHostKeyChecking no
+           RequestTTY yes
+           UserKnownHostsFile /dev/null
       '';
     };
     gnupg.agent = {
@@ -268,6 +269,8 @@
       wl-clipboard
       cliphist
       wtype
+      curl
+      w3m
       wget
       wget2
       fzf
@@ -288,12 +291,12 @@
       inputs.nvf.packages.${pkgs.system}.default
       inputs.llm-agents.packages.${pkgs.system}.default
     ];
-  
+
   nixpkgs.config.cudaSupport = true;
 
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
+    extraPortals = [pkgs.xdg-desktop-portal-hyprland];
     config.common.default = "*";
   };
 
@@ -355,8 +358,8 @@
   services.tailscale.enable = true;
   # Port for SSH/Tailscale opened.
   networking.firewall = {
-    allowedTCPPorts = [ 22 ];
-    trustedInterfaces = [ "tailscale0" ];
+    allowedTCPPorts = [22];
+    trustedInterfaces = ["tailscale0"];
   };
 
   services.llama-cpp = {
@@ -404,8 +407,8 @@
   systemd.user.services = {
     waybar = {
       unitConfig = {
-        After = [ "graphical-session.target" ];
-        Requires = [ "dbus.socket" ];
+        After = ["graphical-session.target"];
+        Requires = ["dbus.socket"];
       };
       serviceConfig = {
         ExecStartPre = "${pkgs.glib}/bin/gdbus wait --system net.hadess.PowerProfiles";
@@ -413,10 +416,10 @@
     };
     rbw-autounlock = {
       description = "Securely unlock Bitwarden Vault on Hyprland Startup";
-      wantedBy = [ "graphical-session.target" ];
+      wantedBy = ["graphical-session.target"];
       unitConfig = {
-        After = [ "graphical-session.target" ];
-        PartOf = [ "graphical-session.target" ];
+        After = ["graphical-session.target"];
+        PartOf = ["graphical-session.target"];
       };
       serviceConfig = {
         Type = "oneshot";
@@ -446,7 +449,7 @@
     virtualisation = {
       memorySize = 8192;
       cores = 8;
-      qemu.options = [ "-device virtio-vga-gl -display gtk,gl=on" ];
+      qemu.options = ["-device virtio-vga-gl -display gtk,gl=on"];
     };
   };
 

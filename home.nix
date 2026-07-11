@@ -15,7 +15,16 @@
     ./modules/home/atuin.nix
     ./modules/home/rbw.nix
   ];
+  
   programs.herdr.enable = true;
   programs.devenv.enable = true;
   programs.home-manager.enable = true;
+
+  services.hyprpaper = {
+    enable = true;
+    settings = {
+      preload = [ ];
+      wallpaper = [ ];
+    };
+  };
 }
