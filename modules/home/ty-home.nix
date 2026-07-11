@@ -1,21 +1,17 @@
-{
-  config,
-  pkgs,
-  lib,
-  inputs,
-  ...
-}:
+{ config, pkgs, lib, inputs, ... }: {
 
-{
   home.stateVersion = "26.11";
-  
-  imports = [ ../../home.nix ];
-  
+  home.username = "ty";
+  home.homeDirectory = "/home/ty"; 
   home.sessionPath = [
     "$HOME/.local/bin"
   ];
   
-  home.file = {
-    ".config/starship.toml".source = ../../config/starship/starship.toml;
+  imports = [ ../../home.nix ];
+
+  programs.starship = {
+    enable = true;
+    enableFishIntegration = true;
+    settings = builtins.fromTOML (builtins.readFile ./starship/starship.toml);
   };
 }

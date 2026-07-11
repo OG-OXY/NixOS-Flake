@@ -54,19 +54,29 @@
   };
 
   # User account.
-  security.sudo = {
-    enable = true;
-    extraRules = [
-      {
-        groups = [ "wheel" ];
-        commands = [
-          {
-            command = "ALL";
-            options = [ "NOPASSWD" ];
-          }
-        ];
-      }
-    ];
+  security = {
+    doas = {
+      enable = true;
+      extraRules = [{
+        users = [ "ty" ];
+	noPass = true;
+	keepEnv = true;
+      }];
+    };
+    sudo = {
+      enable = true;
+      extraRules = [
+        {
+          groups = [ "wheel" ];
+          commands = [
+            {
+              command = "ALL";
+              options = [ "NOPASSWD" ];
+            }
+          ];
+        }
+      ];
+    };
   };
 
   security.polkit.enable = true;
@@ -159,12 +169,8 @@
       pinentryPackage = pkgs.pinentry-gnome3;
     };
     regreet.enable = true;
-    tmux.enable = true;
     fish.enable = true;
-    yazi.enable = true;
-    starship.enable = true;
     zoxide.enable = true;
-    atuin.enable = true;
     gamemode.enable = true;
     virt-manager.enable = true;
     nano.enable = false;
@@ -226,7 +232,6 @@
 
   # System parameters (Converted to relative path for Flake compliance)
   environment.etc = {
-    "atuin/config.toml".source = ./config/atuin/config.toml;
   };
 
   # Install system PKGS.

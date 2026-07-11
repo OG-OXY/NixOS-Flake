@@ -1,4 +1,4 @@
-format = '[root](bold yellow)[@](bold red)[NixOS](bold blue)[:](bold red)$directory$git_branch$git_status$nix_shell$package$python$rust[\]](bold yellow)[‡](bold red) $character$status'
+format = '[Root](bold yellow)[@](bold red)[NixOS](bold blue)[:](bold red)$directory$git_branch$git_status$nix_shell$package$python$rust[\]](bold yellow)[‡](bold red) $character$status'
 
 [character]
 success_symbol = "[❯](bold blue)"
