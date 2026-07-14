@@ -13,52 +13,48 @@
     llm-agents.url = "path:./flakes/LLM-Agents";
   };
 
-  outputs =
-    {
-      self,
-      nixpkgs,
-      nixpkgs-stable,
-      home-manager,
-      ...
-    }@inputs:
-    {
-      nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs self; };
-        modules = [
-          ./config.nix
-          {
-            nixpkgs.hostPlatform = "x86_64-linux";
-            nixpkgs.config.allowUnfree = true;
-            nixpkgs.config.permittedInsecurePackages = [
-              "electron-39.8.10"
-            ];
-            nixpkgs.overlays = [
-              (
-                final: prev:
-                let
-                  stable = import nixpkgs-stable {
-                    inherit (prev) system;
-                    config = prev.config;
-                  };
-                in
-                {
-                  cantarell-fonts = stable.cantarell-fonts;
-                }
-              )
-            ];
-          }
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              backupFileExtension = "backup";
-              users.root = import ./modules/home/root-home.nix;
-              users.ty = import ./modules/home/ty-home.nix;
-              extraSpecialArgs = { inherit inputs self; };
-            };
-          }
-        ];
-      };
+  outputs = {
+    self,
+    nixpkgs,
+    nixpkgs-stable,
+    home-manager,
+    ...
+  } @ inputs: {
+    nixosConfigurations."nixos" = nixpkgs.lib.nixosSystem {
+      specialArgs = {inherit inputs self;};
+      modules = [
+        ./config.nix
+        {
+          nixpkgs.hostPlatform = "x86_64-linux";
+          nixpkgs.config.allowUnfree = true;
+          nixpkgs.config.permittedInsecurePackages = [
+            "electron-39.8.10"
+          ];
+          nixpkgs.overlays = [
+            (
+              final: prev: let
+                stable = import nixpkgs-stable {
+                  inherit (prev) system;
+                  config = prev.config;
+                };
+              in {
+                cantarell-fonts = stable.cantarell-fonts;
+              }
+            )
+          ];
+        }
+        home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            backupFileExtension = "backup";
+            users.root = import ./modules/home/root-home.nix;
+            users.ty = import ./modules/home/ty-home.nix;
+            extraSpecialArgs = {inherit inputs self;};
+          };
+        }
+      ];
     };
+  };
 }
