@@ -1,4 +1,11 @@
-{ config, pkgs, lib, inputs, ... }: {
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
+{
 
   home.stateVersion = "26.11";
   xdg.configFile = {
@@ -15,7 +22,7 @@
     ./modules/home/atuin.nix
     ./modules/home/rbw.nix
   ];
-  
+
   programs.herdr.enable = true;
   programs.devenv.enable = true;
   programs.home-manager.enable = true;
@@ -23,8 +30,8 @@
   services.hyprpaper = {
     enable = true;
     settings = {
-      preload = [ ];
-      wallpaper = [ ];
+      preload = [ "~/Media/Pictures/wpapers/" ];
+      wallpaper = [ "~/Media/Pictures/wpapers/gruvbox-rainbow-nix.png" ];
     };
   };
 }
