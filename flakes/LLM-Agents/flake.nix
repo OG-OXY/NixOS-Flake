@@ -14,83 +14,92 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    llm-agents,
-    ...
-  }: let
-    # Define architectures so both PC and Android are supported natively
-    supportedSystems = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
-    forEachSystem = f:
-      nixpkgs.lib.genAttrs supportedSystems (
-        system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      llm-agents,
+      ...
+    }:
+    let
+      # Define architectures so both PC and Android are supported natively
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+      forEachSystem =
+        f:
+        nixpkgs.lib.genAttrs supportedSystems (
+          system:
           f (
             import nixpkgs {
               inherit system;
               config.allowUnfree = true; # Required for proprietary agent engines
             }
           )
+        );
+    in
+    {
+      # TARGET 1: Standalone Package Output (For your main PC System Packages)
+      packages = forEachSystem (
+        pkgs:
+        let
+          agents = llm-agents.packages.${pkgs.system};
+        in
+        {
+          default = pkgs.symlinkJoin {
+            name = "ai-agents-bundle";
+            paths = [
+              agents.claude-code
+              agents.crush
+              agents.goose-cli
+            ];
+          };
+        }
       );
-  in {
-    # TARGET 1: Standalone Package Output (For your main PC System Packages)
-    packages = forEachSystem (
-      pkgs: let
-        agents = llm-agents.packages.${pkgs.system};
-      in {
-        default = pkgs.symlinkJoin {
-          name = "ai-agents-bundle";
-          paths = [
-            agents.claude-code
-            agents.crush
-            agents.goose-cli
-          ];
-        };
-      }
-    );
 
-    # TARGET 2: DevShell Output (The ultimate portable and sandboxed workspace)
-    devShells = forEachSystem (
-      pkgs: let
-        agents = llm-agents.packages.${pkgs.system};
-      in {
-        default = pkgs.mkShell {
-          name = "agent-sandbox";
+      # TARGET 2: DevShell Output (The ultimate portable and sandboxed workspace)
+      devShells = forEachSystem (
+        pkgs:
+        let
+          agents = llm-agents.packages.${pkgs.system};
+        in
+        {
+          default = pkgs.mkShell {
+            name = "agent-sandbox";
 
-          # Use nativeBuildInputs for devshell packages so tools are placed into $PATH properly
-          nativeBuildInputs = [
-            # Agents from Numtide
-            agents.claude-code
-            agents.crush
-            agents.goose-cli
+            # Use nativeBuildInputs for devshell packages so tools are placed into $PATH properly
+            nativeBuildInputs = [
+              # Agents from Numtide
+              agents.claude-code
+              agents.crush
+              agents.goose-cli
 
-            # Native utilities from nixpkgs
-            pkgs.herdr
-	    pkgs.devenv
-            pkgs.llama-cpp
-            pkgs.nodejs_22
-            pkgs.ripgrep
-            pkgs.bun
-            pkgs.gh
-            pkgs.fd
-            pkgs.fzf
-            pkgs.jq
-            pkgs.git
-          ];
+              # Native utilities from nixpkgs
+              pkgs.herdr
+              pkgs.devenv
+              pkgs.llama-cpp
+              pkgs.nodejs_22
+              pkgs.ripgrep
+              pkgs.gawk
+              pkgs.bun
+              pkgs.gh
+              pkgs.fd
+              pkgs.fzf
+              pkgs.jq
+              pkgs.git
+            ];
 
-          shellHook = ''
-            echo "========================================================"
-            echo " 🤖 AI AGENT SANDBOX ACTIVATED                          "
-            echo " System Context: ${pkgs.system}                         "
-            echo " Available: claude-code, crush, goose                   "
-            echo "========================================================"
-            export PATH="$PWD/node_modules/.bin:$PATH"
-          '';
-        };
-      }
-    );
-  };
+            shellHook = ''
+              echo "========================================================"
+              echo " 🤖 AI AGENT SANDBOX ACTIVATED                          "
+              echo " System Context: ${pkgs.system}                         "
+              echo " Available: claude-code, crush, goose                   "
+              echo "========================================================"
+              export PATH="$PWD/node_modules/.bin:$PATH"
+            '';
+          };
+        }
+      );
+    };
 }
