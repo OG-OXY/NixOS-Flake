@@ -10,9 +10,9 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
-  
+
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  
+
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   boot = {
@@ -51,7 +51,7 @@
     };
     binfmt.emulatedSystems = [ "aarch64-linux" ];
   };
-  
+
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-uuid/2990dbf8-472f-4656-be4f-3c2363bf7482";

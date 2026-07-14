@@ -6,7 +6,8 @@
   inputs,
   self,
   ...
-}: {
+}:
+{
   imports = [
     ./modules/hardware/hardware.nix
     ./modules/hardware/amd.nix
@@ -16,7 +17,7 @@
   # Login shell.
   users.users.ty.shell = pkgs.fish;
   users.users.root.shell = pkgs.fish;
-  environment.shells = with pkgs; [fish];
+  environment.shells = with pkgs; [ fish ];
 
   # Bootloader + GRUB parameters.
   boot.loader = {
@@ -46,7 +47,7 @@
     gc = {
       automatic = true;
       dates = "weekly";
-      options = "--delete-older-than 7d";
+      options = "--delete-older-than 5d";
     };
   };
 
@@ -56,7 +57,7 @@
       enable = true;
       extraRules = [
         {
-          users = ["ty"];
+          users = [ "ty" ];
           noPass = true;
           keepEnv = true;
         }
@@ -66,11 +67,11 @@
       enable = true;
       extraRules = [
         {
-          groups = ["wheel"];
+          groups = [ "wheel" ];
           commands = [
             {
               command = "ALL";
-              options = ["NOPASSWD"];
+              options = [ "NOPASSWD" ];
             }
           ];
         }
@@ -97,7 +98,7 @@
       "wireshark"
       "tcpdump"
     ];
-    packages = with pkgs; [
+    packages = [
     ];
   };
 
@@ -113,9 +114,10 @@
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     WLR_NO_HARDWARE_CURSORS = "1";
-    ANTHROPIC_BASE_URL = "http://localhost:8012";
+    ANTHROPIC_BASE_URL = "http://127.0.0.1:11434/v1";
     ANTHROPIC_API_KEY = "local";
     ANTHROPIC_DEFAULT_SONNET_MODEL = "qwen-14b";
+    CLAUDE_CODE_ATTRIBUTION_HEADER = "0";
     EDITOR = "nvf";
     VISUAL = "nvf";
   };
@@ -296,7 +298,7 @@
 
   xdg.portal = {
     enable = true;
-    extraPortals = [pkgs.xdg-desktop-portal-hyprland];
+    extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
     config.common.default = "*";
   };
 
@@ -358,18 +360,34 @@
   services.tailscale.enable = true;
   # Port for SSH/Tailscale opened.
   networking.firewall = {
-    allowedTCPPorts = [22];
-    trustedInterfaces = ["tailscale0"];
+    allowedTCPPorts = [ 22 ];
+    trustedInterfaces = [ "tailscale0" ];
+  };
+
+  services.ollama = {
+    enable = true;
+    package = pkgs.ollama-cuda;
   };
 
   services.llama-cpp = {
     enable = true;
+    package =
+      (pkgs.llama-cpp.override {
+        cudaSupport = true;
+      }).overrideAttrs
+        (oldAttrs: {
+          # This is how you correctly pass extra flags to the build system
+          cmakeFlags = (oldAttrs.cmakeFlags or [ ]) ++ [
+            "-DCMAKE_CUDA_ARCHITECTURES=61"
+          ];
+        });
     settings = {
-      hf-repo = "ggml-org/Qwen2.5-Coder-14B-Q8_0-GGUF";
+      hf-repo = "Qwen/Qwen2.5-Coder-14B-Instruct-GGUF";
+      hf-file = "qwen2.5-coder-14b-instruct-q5_k_m.gguf";
       port = 8012;
       jinja = true;
-      ctx-size = 8192;
-      n-gpu-layers = 99;
+      ctx-size = 4096;
+      n-gpu-layers = 20;
     };
   };
 
@@ -407,8 +425,8 @@
   systemd.user.services = {
     waybar = {
       unitConfig = {
-        After = ["graphical-session.target"];
-        Requires = ["dbus.socket"];
+        After = [ "graphical-session.target" ];
+        Requires = [ "dbus.socket" ];
       };
       serviceConfig = {
         ExecStartPre = "${pkgs.glib}/bin/gdbus wait --system net.hadess.PowerProfiles";
@@ -416,10 +434,10 @@
     };
     rbw-autounlock = {
       description = "Securely unlock Bitwarden Vault on Hyprland Startup";
-      wantedBy = ["graphical-session.target"];
+      wantedBy = [ "graphical-session.target" ];
       unitConfig = {
-        After = ["graphical-session.target"];
-        PartOf = ["graphical-session.target"];
+        After = [ "graphical-session.target" ];
+        PartOf = [ "graphical-session.target" ];
       };
       serviceConfig = {
         Type = "oneshot";
@@ -449,7 +467,7 @@
     virtualisation = {
       memorySize = 8192;
       cores = 8;
-      qemu.options = ["-device virtio-vga-gl -display gtk,gl=on"];
+      qemu.options = [ "-device virtio-vga-gl -display gtk,gl=on" ];
     };
   };
 

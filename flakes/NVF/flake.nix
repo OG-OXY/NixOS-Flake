@@ -152,12 +152,23 @@
                       };
                       fish.enable = true;
                       bash.enable = true;
+                      lua = {
+                        lsp.servers = [ "lua-language-server" ];
+                        format.type = [ "stylua" ];
+                      };
+                      python = {
+                        lsp.servers = [
+                          "pyright"
+                          "basedpyright"
+                          "python-lsp-server"
+                        ];
+                        format.type = [ "black" ];
+                      };
                       json.enable = true;
                       toml.enable = true;
+                      css.enable = true;
                       markdown.enable = true;
                       html.enable = true;
-                      css.enable = true;
-                      lua.enable = true;
                     };
 
                     notes = {
