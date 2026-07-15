@@ -23,9 +23,16 @@
     ./modules/home/rbw.nix
   ];
 
-  programs.herdr.enable = true;
-  programs.devenv.enable = true;
-  programs.home-manager.enable = true;
+  #programs.waybar.enable = true;
+  programs = {
+    waybar = {
+      enable = true;
+      systemd.enable = true;
+    };
+    herdr.enable = true;
+    devenv.enable = true;
+    home-manager.enable = true;
+  };
 
   services.hyprpaper = {
     enable = true;

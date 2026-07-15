@@ -167,6 +167,7 @@
                       json.enable = true;
                       toml.enable = true;
                       css.enable = true;
+                      xml.enable = true;
                       markdown.enable = true;
                       html.enable = true;
                     };

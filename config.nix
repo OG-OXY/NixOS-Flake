@@ -492,20 +492,16 @@
   system.systemBuilderCommands = ''
     ln -s ${self} $out/src
   '';
-
   # Injects git commit hash into the system version metadata
   system.configurationRevision = lib.mkIf (self ? rev) self.rev;
-
   # Time zone.
   time.timeZone = "America/New_York";
-
   # Disabled PKGS.
   services = {
     resolved.enable = false;
     libinput.enable = false;
     printing.enable = false;
   };
-
   # Origin NixOS install version, NEVER CHANGE.
   system.stateVersion = "26.05";
 }
