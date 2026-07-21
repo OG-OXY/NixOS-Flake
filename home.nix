@@ -37,7 +37,7 @@
   services.hyprpaper = {
     enable = true;
     settings = {
-      preload = [ "~/Media/Pictures/wpapers/" ];
+      preload = [ "~/Media/Pictures/wpapers/gruvbox-rainbow-nix.png" ];
       wallpaper = [ "~/Media/Pictures/wpapers/gruvbox-rainbow-nix.png" ];
     };
   };

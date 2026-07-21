@@ -3,8 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nvf.url = "github:notashelf/nvf";
-    nvf.inputs.nixpkgs.follows = "nixpkgs";
+    nvf = {
+      url = "github:notashelf/nvf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -136,8 +138,10 @@
                       }
                     ];
 
-                    lsp.enable = true;
-                    lsp.formatOnSave = true;
+                    lsp = {
+                      enable = true;
+                      formatOnSave = true;
+                    };
 
                     # Languages and Automatic LSPs
                     languages = {
@@ -150,12 +154,12 @@
                         lsp.servers = [ "nixd" ];
                         format.type = [ "nixfmt" ];
                       };
-                      fish.enable = true;
-                      bash.enable = true;
+
                       lua = {
                         lsp.servers = [ "lua-language-server" ];
                         format.type = [ "stylua" ];
                       };
+
                       python = {
                         lsp.servers = [
                           "pyright"
@@ -164,12 +168,25 @@
                         ];
                         format.type = [ "black" ];
                       };
+
+                      yaml = {
+                        enable = true;
+                        format.type = [ "prettier" ];
+                      };
+
+                      fish.enable = true;
+                      bash.enable = true;
                       json.enable = true;
                       toml.enable = true;
                       css.enable = true;
                       xml.enable = true;
                       markdown.enable = true;
                       html.enable = true;
+                    };
+
+                    diagnostics.presets = {
+                      statix.enable = true;
+                      deadnix.enable = true;
                     };
 
                     notes = {
