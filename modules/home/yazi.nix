@@ -2,11 +2,12 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   programs.yazi = {
     enable = true;
-    enableFishIntegration = false;
-
+    enableFishIntegration = true;
+    package = null;
     settings = {
       manager = {
         show_hidden = true;

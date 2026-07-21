@@ -6,13 +6,27 @@
   ...
 }:
 {
+  home = {
+    stateVersion = "26.11";
+    sessionPath = [
+      "$HOME/.local/bin"
+    ];
+    sessionVariables = {
+      EDITOR = "nvf";
+      VISUAL = "nvf";
+    };
+  };
 
-  home.stateVersion = "26.11";
-  xdg.configFile = {
-    "ghostty/config".text = ''
-      theme = GruvBoxDark
-      background-opacity = 1.0
-    '';
+  xdg = {
+    configFile = {
+      "ghostty/config".text = ''
+        theme = GruvBoxDark
+        background-opacity = 1.0
+      '';
+    };
+    dataFile = {
+      #
+    };
   };
   imports = [
     ./modules/home/fish.nix
@@ -23,7 +37,6 @@
     ./modules/home/rbw.nix
   ];
 
-  #programs.waybar.enable = true;
   programs = {
     waybar = {
       enable = true;
@@ -32,13 +45,5 @@
     herdr.enable = true;
     devenv.enable = true;
     home-manager.enable = true;
-  };
-
-  services.hyprpaper = {
-    enable = true;
-    settings = {
-      preload = [ "~/Media/Pictures/wpapers/gruvbox-rainbow-nix.png" ];
-      wallpaper = [ "~/Media/Pictures/wpapers/gruvbox-rainbow-nix.png" ];
-    };
   };
 }

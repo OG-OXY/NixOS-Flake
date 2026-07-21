@@ -3,31 +3,30 @@
   programs.fish = {
     enable = true;
     functions = {
-      y = {
-        body = ''
-          set -l tmp (mktemp -t "yazi-cwd.XXXXX")
-          command yazi $argv --cwd-file="$tmp"
-          if set -l cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
-            builtin cd -- "$cwd"
-          end
-          rm -f -- "$tmp"
-        '';
-      };
-      gback = {
-      description = "Safely undo the last Git commit but keep file changes";
-      body = ''
-        if not git rev-parse --is-inside-work-tree >/dev/null 2>&1
-          echo (set_color red)"❌ Error: Not a git repository!"(set_color normal)
-          return 1
-        end
-        echo (set_color yellow)"⏪ Undoing last commit safely (keeping modifications)..."(set_color normal)       git reset --soft HEAD~1
-        echo (set_color green)"✨ Done! Check 'git status' to see your uncommitted files."(set_color normal)
-	'';
-      };
+      #y = {
+      #  body = ''
+      #    set -l tmp (mktemp -t "yazi-cwd.XXXXX")
+      #    command yazi $argv --cwd-file="$tmp"
+      #    if set -l cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+      #      builtin cd -- "$cwd"
+      #    end
+      #    rm -f -- "$tmp"
+      #  '';
+      #};
+      #gback = {
+      #description = "Safely undo the last Git commit but keep file changes";
+      #body = ''
+      #  if not git rev-parse --is-inside-work-tree >/dev/null 2>&1
+      #    echo (set_color red)"❌ Error: Not a git repository!"(set_color normal)
+      #    return 1
+      #  end
+      #  echo (set_color yellow)"⏪ Undoing last commit safely (keeping modifications)..."(set_color normal)       git reset --soft HEAD~1
+      #  echo (set_color green)"✨ Done! Check 'git status' to see your uncommitted files."(set_color normal)
+      #'';
+      #};
     };
 
     shellAbbrs = {
-      sudo = "doas";
       su = "doas fish";
       ls = "ls -a";
       cds = "cd ~/NixOS/nixos";
@@ -70,12 +69,27 @@
     '';
 
     plugins = with pkgs.fishPlugins; [
-      { name = "bass"; src = bass.src; }
-      { name = "fzf-fish"; src = fzf-fish.src; }
-      { name = "autopair"; src = autopair.src; }
-      { name = "sponge"; src = sponge.src; }
-      { name = "done"; src = done.src; }
-      { 
+      {
+        name = "bass";
+        src = bass.src;
+      }
+      {
+        name = "fzf-fish";
+        src = fzf-fish.src;
+      }
+      {
+        name = "autopair";
+        src = autopair.src;
+      }
+      {
+        name = "sponge";
+        src = sponge.src;
+      }
+      {
+        name = "done";
+        src = done.src;
+      }
+      {
         name = "abbreviation-tips";
         src = pkgs.fetchFromGitHub {
           owner = "gazorby";
@@ -95,13 +109,4 @@
       }
     ];
   };
-
-  home.sessionVariables = {
-    EDITOR = "nvf";
-    VISUAL = "nvf";
-  };
-
-  home.sessionPath = [
-    "$HOME/.local/bin"
-  ];
 }

@@ -9,7 +9,10 @@
       font-family-italic = "JetBrainsMono Nerd Font Bold Italic";
       font-family-bold-italic = "JetBrainsMono Nerd Font ExtraBold Italic";
       font-size = 22;
-      font-feature = [ "liga" "calt" ];
+      font-feature = [
+        "liga"
+        "calt"
+      ];
     };
   };
 }

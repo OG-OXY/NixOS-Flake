@@ -250,6 +250,7 @@
         mako
         wofi
         ghostty
+        yazi
         hyprpaper
         bitwarden-desktop
         vesktop
@@ -298,8 +299,6 @@
       #
     };
   };
-
-  nixpkgs.config.cudaSupport = true;
 
   xdg.portal = {
     enable = true;

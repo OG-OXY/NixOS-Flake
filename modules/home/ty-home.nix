@@ -7,12 +7,10 @@
 }:
 {
 
-  home.stateVersion = "26.11";
-  home.username = "ty";
-  home.homeDirectory = "/home/ty";
-  home.sessionPath = [
-    "$HOME/.local/bin"
-  ];
+  home = {
+    username = "ty";
+    homeDirectory = "/home/ty";
+  };
 
   imports = [ ../../home.nix ];
 
