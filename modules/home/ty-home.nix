@@ -6,7 +6,6 @@
   ...
 }:
 {
-
   home = {
     username = "ty";
     homeDirectory = "/home/ty";

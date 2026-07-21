@@ -1,29 +1,19 @@
-{ config, pkgs, ... }: {
-
+{ config, pkgs, ... }:
+{
   programs.fish = {
     enable = true;
     functions = {
-      #y = {
-      #  body = ''
-      #    set -l tmp (mktemp -t "yazi-cwd.XXXXX")
-      #    command yazi $argv --cwd-file="$tmp"
-      #    if set -l cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
-      #      builtin cd -- "$cwd"
-      #    end
-      #    rm -f -- "$tmp"
-      #  '';
-      #};
-      #gback = {
-      #description = "Safely undo the last Git commit but keep file changes";
-      #body = ''
-      #  if not git rev-parse --is-inside-work-tree >/dev/null 2>&1
-      #    echo (set_color red)"❌ Error: Not a git repository!"(set_color normal)
-      #    return 1
-      #  end
-      #  echo (set_color yellow)"⏪ Undoing last commit safely (keeping modifications)..."(set_color normal)       git reset --soft HEAD~1
-      #  echo (set_color green)"✨ Done! Check 'git status' to see your uncommitted files."(set_color normal)
-      #'';
-      #};
+      gback = {
+        description = "Safely undo the last Git commit but keep file changes";
+        body = ''
+          if not git rev-parse --is-inside-work-tree >/dev/null 2>&1
+            echo (set_color red)"❌ Error: Not a git repository!"(set_color normal)
+            return 1
+          end
+          echo (set_color yellow)"⏪ Undoing last commit safely (keeping modifications)..."(set_color normal)       git reset --soft HEAD~1
+          echo (set_color green)"✨ Done! Check 'git status' to see your uncommitted files."(set_color normal)
+        '';
+      };
     };
 
     shellAbbrs = {

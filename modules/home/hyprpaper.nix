@@ -1,17 +1,14 @@
-{
-  pkgs,
-  config,
-  lib,
-  inputs,
-  ...
-}:
+{ pkgs, lib, ... }:
+
 let
-  wallpaperDirPath = "/home/ty/Media/Pictures/wpapers";
-  dirContents = builtins.readDir wallpaperDirPath;
-  allWallpapers = lib.mapAttrsToList (name: type: "${wallpaperDirPath}/${name}") (
-    lib.filterAttrs (name: type: type == "regular") dirContents
+  dirString = "/home/ty/Media/Pictures/wpapers";
+  wallpaperDir = /. + dirString; # Converts string to a Nix path
+
+  wallpapers = map (file: "${dirString}/${file}") (
+    builtins.attrNames (builtins.readDir wallpaperDir)
   );
-  defaultWallpaper = "${wallpaperDirPath}/gruvbox-rainbow-nix.png";
+
+  defaultWallpaper = "${dirString}/gruvbox-rainbow-nix.png";
 in
 {
   services.hyprpaper = {
@@ -19,7 +16,7 @@ in
     settings = {
       ipc = "on";
       splash = false;
-      preload = "allWallpapers";
+      preload = wallpapers;
       wallpaper = [
         ",${defaultWallpaper}"
       ];

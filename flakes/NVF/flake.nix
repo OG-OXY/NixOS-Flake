@@ -1,6 +1,5 @@
 {
   description = "AstroNvim Replication Package using NVF";
-
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nvf = {

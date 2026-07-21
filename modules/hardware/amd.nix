@@ -1,4 +1,3 @@
-# amd.nix
 { config, pkgs, ... }:
 
 {

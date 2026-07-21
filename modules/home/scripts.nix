@@ -1,4 +1,5 @@
-{ config, pkgs, ... }: {
+{ config, pkgs, ... }:
+{
   home.packages = [
     # 1. The Full Upgrade + Backup Loop
     (pkgs.writeScriptBin "nix-upgrade-backup" ''

@@ -1,4 +1,3 @@
-# Help is in configuration.nix(5) man page, https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 {
   pkgs,
   lib,
@@ -6,6 +5,7 @@
   self,
   ...
 }:
+
 {
   imports = [
     ./modules/hardware/hardware.nix
